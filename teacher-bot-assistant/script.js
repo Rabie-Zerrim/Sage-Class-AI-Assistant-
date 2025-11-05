@@ -25,37 +25,53 @@ document.addEventListener('click', function(event) {
 
     // Simulate bot response
     setTimeout(() => {
-        // Check for greetings
-        if (isGreeting(query)) {
-            addBotMessage("Hello! I'm GATA, your Generative AI Teaching Assistant. How can I help you today?");
-            return;
+        // Activate Sage talking animation
+        const sageAvatar = document.getElementById('sage-avatar');
+        const sageStatus = document.getElementById('sage-status');
+        if (sageAvatar) sageAvatar.classList.add('talking');
+        if (sageStatus) {
+            sageStatus.classList.add('typing');
+            sageStatus.textContent = 'Typing';
         }
 
-        const suggestion = getTeachingSuggestion(query);
-        addBotMessage(suggestion.text);
-        if (suggestion.videos && suggestion.videos.length > 0) {
-            showVideoSuggestions(suggestion.videos);
-        }
-        if (suggestion.slides && suggestion.slides.length > 0) {
-            showSlideSuggestions(suggestion.slides);
-        }
+        // Simulate typing delay
+        setTimeout(() => {
+            // Check for greetings
+            if (isGreeting(query)) {
+                addBotMessage("Hello! I'm Sage, your Class Assistant AI. How can I help you today?");
+                stopSageAnimation();
+                return;
+            }
 
-        // If user asks to create a post, start multi-step post creation
-        if (query.toLowerCase().includes('create a post') || query.toLowerCase().includes('plus create a post')) {
-            conversationState.creatingPost = true;
-            conversationState.postCreationStep = 1;
-            conversationState.newPostData = { topic: '', title: '', content: '' };
-            addBotMessage("Sure! Let's create a new post. What is the topic?");
-        }
+            const suggestion = getTeachingSuggestion(query);
+            addBotMessage(suggestion.text);
+            if (suggestion.videos && suggestion.videos.length > 0) {
+                showVideoSuggestions(suggestion.videos);
+            }
+            if (suggestion.slides && suggestion.slides.length > 0) {
+                showSlideSuggestions(suggestion.slides);
+            }
 
-        // If user asks to create a lesson plan, start multi-step lesson plan creation
-        if (query.toLowerCase().includes('create a lesson plan') || query.toLowerCase().includes('help me create a lesson plan')) {
-            conversationState.creatingLessonPlan = true;
-            conversationState.lessonPlanStep = 1;
-            conversationState.lessonPlanData = { student: '', topic: '', learningStyle: '' };
-            addBotMessage("Great! I'd love to help you create a personalized lesson plan. Which student is this lesson plan for?");
-        }
-    }, 1000);
+            // Stop animation after response
+            stopSageAnimation();
+
+            // If user asks to create a post, start multi-step post creation
+            if (query.toLowerCase().includes('create a post') || query.toLowerCase().includes('plus create a post')) {
+                conversationState.creatingPost = true;
+                conversationState.postCreationStep = 1;
+                conversationState.newPostData = { topic: '', title: '', content: '' };
+                setTimeout(() => addBotMessage("Sure! Let's create a new post. What is the topic?"), 500);
+            }
+
+            // If user asks to create a lesson plan, start multi-step lesson plan creation
+            if (query.toLowerCase().includes('create a lesson plan') || query.toLowerCase().includes('help me create a lesson plan')) {
+                conversationState.creatingLessonPlan = true;
+                conversationState.lessonPlanStep = 1;
+                conversationState.lessonPlanData = { student: '', topic: '', learningStyle: '' };
+                setTimeout(() => addBotMessage("Great! I'd love to help you create a personalized lesson plan. Which student is this lesson plan for?"), 500);
+            }
+        }, 1500); // Typing delay
+    }, 500);
   }
 });
 
@@ -94,26 +110,53 @@ function saveNewPost(postData) {
         topic: postData.topic,
         title: postData.title,
         content: postData.content,
-        author: 'Hmouda',
+        author: 'Rabie',
         date: new Date().toLocaleDateString()
     };
     posts.push(newPost);
     localStorage.setItem('posts', JSON.stringify(posts));
 }
 
-// Add navigation for Teacher Tools button
-document.getElementById('btn-teacher-tools').addEventListener('click', function() {
-    window.location.href = 'topics.html';
-});
+// Add navigation for Teacher Tools button (updated for new UI)
+const teacherToolsBtn = document.getElementById('btn-teacher-tools');
+if (teacherToolsBtn) {
+    teacherToolsBtn.addEventListener('click', function() {
+        window.location.href = 'topics.html';
+    });
+}
 
-// Add navigation for Logout button
-document.getElementById('btn-logout').addEventListener('click', function() {
-    window.location.href = 'login.html';
-});
+// Add navigation for Logout button (updated for new UI)
+const logoutBtn = document.getElementById('btn-logout');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+        window.location.href = 'login.html';
+    });
+}
 
-// Add navigation for New Post button
-document.getElementById('btn-new-post').addEventListener('click', function() {
-    window.location.href = 'newpost.html';
+// Add navigation for New Post button (updated for new UI)
+const newPostBtn = document.getElementById('btn-new-post');
+if (newPostBtn) {
+    newPostBtn.addEventListener('click', function() {
+        window.location.href = 'newpost.html';
+    });
+}
+
+// Add click handlers for chat items in sidebar
+document.querySelectorAll('.chat-item').forEach(item => {
+    item.addEventListener('click', function() {
+        const page = this.getAttribute('data-page');
+        
+        // If it's the current page (index.html), just update active state
+        if (page === 'index.html') {
+            // Remove active class from all items
+            document.querySelectorAll('.chat-item').forEach(i => i.classList.remove('active'));
+            // Add active class to clicked item
+            this.classList.add('active');
+        } else if (page) {
+            // Navigate to the specified page
+            window.location.href = page;
+        }
+    });
 });
 
 function getFollowUpQuestion() {
@@ -140,19 +183,81 @@ function getAllFollowUpQuestions() {
 
 function addUserMessage(text) {
     const output = document.getElementById('chat-output');
+    
+    // Create message row for new dark chat UI
+    const messageRow = document.createElement('div');
+    messageRow.className = 'message-row outgoing';
+    
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'msg outgoing';
+    
+    const textDiv = document.createElement('div');
+    textDiv.textContent = text;
+    
+    const metaDiv = document.createElement('div');
+    metaDiv.className = 'meta';
+    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    metaDiv.innerHTML = `<span>👁️ 1</span><span>${time}</span>`;
+    
+    msgDiv.appendChild(textDiv);
+    msgDiv.appendChild(metaDiv);
+    
+    const avatarDiv = document.createElement('div');
+    avatarDiv.className = 'avatar-small';
+    avatarDiv.textContent = '👤';
+    
+    messageRow.appendChild(msgDiv);
+    messageRow.appendChild(avatarDiv);
+    
+    output.appendChild(messageRow);
+    
+    // Also add as legacy class for compatibility
     const userDiv = document.createElement('div');
     userDiv.className = 'user-message';
-    userDiv.textContent = `You: ${text}`;
+    userDiv.textContent = text;
+    userDiv.style.display = 'none'; // Hide legacy version
     output.appendChild(userDiv);
+    
     output.scrollTop = output.scrollHeight;
 }
 
 function addBotMessage(text) {
     const output = document.getElementById('chat-output');
+    
+    // Create message row for new dark chat UI
+    const messageRow = document.createElement('div');
+    messageRow.className = 'message-row incoming';
+    
+    const avatarDiv = document.createElement('div');
+    avatarDiv.className = 'avatar-small';
+    avatarDiv.textContent = '🧙';
+    
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'msg incoming';
+    
+    const textDiv = document.createElement('div');
+    textDiv.innerHTML = text.replace(/\n/g, '<br>'); // Convert newlines to <br>
+    
+    const metaDiv = document.createElement('div');
+    metaDiv.className = 'meta';
+    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    metaDiv.innerHTML = `<span>${time}</span>`;
+    
+    msgDiv.appendChild(textDiv);
+    msgDiv.appendChild(metaDiv);
+    
+    messageRow.appendChild(avatarDiv);
+    messageRow.appendChild(msgDiv);
+    
+    output.appendChild(messageRow);
+    
+    // Also add as legacy class for compatibility
     const botDiv = document.createElement('div');
     botDiv.className = 'bot-message';
-    botDiv.textContent = text;
+    botDiv.innerHTML = text.replace(/\n/g, '<br>');
+    botDiv.style.display = 'none'; // Hide legacy version
     output.appendChild(botDiv);
+    
     output.scrollTop = output.scrollHeight;
 }
 
@@ -519,6 +624,16 @@ function isGreeting(query) {
 function isTeachingQuery(query) {
     const teachingKeywords = ['teach', 'teaching', 'method', 'suggestion', 'suggest', 'learn', 'learning', 'student', 'class', 'lesson'];
     return teachingKeywords.some(keyword => query.includes(keyword));
+}
+
+function stopSageAnimation() {
+    const sageAvatar = document.getElementById('sage-avatar');
+    const sageStatus = document.getElementById('sage-status');
+    if (sageAvatar) sageAvatar.classList.remove('talking');
+    if (sageStatus) {
+        sageStatus.classList.remove('typing');
+        sageStatus.textContent = 'Online';
+    }
 }
 
 function handleLessonPlanStep(userInput) {

@@ -4,7 +4,285 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>New Post - Teacher Bot Assistant</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">CH</div>
+        <h2 style="margin:0;font-size:18px;color:#fff">Chat</h2>
+      </div>
+      <div class="search">
+        <span>🔍</span>
+        <span>Search</span>
+      </div>
+      <div class="chats">
+        <div class="chat-item" data-page="index.html">
+          <div class="avatar">🧙</div>
+          <div class="meta">
+            <div class="name">Sage - AI Assistant</div>
+            <div class="last">Let me help you with that...</div>
+          </div>
+        </div>
+        <div class="chat-item" data-page="login.html">
+          <div class="avatar">👤</div>
+          <div class="meta">
+            <div class="name">Profile / Logout</div>
+            <div class="last">View your profile</div>
+          </div>
+        </div>
+        <div class="chat-item" data-page="topics.html">
+          <div class="avatar">📚</div>
+          <div class="meta">
+            <div class="name">Teacher Tools</div>
+            <div class="last">Browse topics and resources</div>
+          </div>
+        </div>
+        <div class="chat-item active" data-page="newpost.html">
+          <div class="avatar">📝</div>
+          <div class="meta">
+            <div class="name">New Post</div>
+            <div class="last">Create a new post...</div>
+          </div>
+        </div>
+        <div class="chat-item" data-page="classrooms.html">
+          <div class="avatar">🏫</div>
+          <div class="meta">
+            <div class="name">Class Chat Rooms</div>
+            <div class="last">Join your class</div>
+          </div>
+        </div>
+        <div class="chat-item" data-page="newstudent.html">
+          <div class="avatar">🎓</div>
+          <div class="meta">
+            <div class="name">Students</div>
+            <div class="last">Add new student</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="chat-area">
+      <div class="topbar">
+        <div class="title">
+          <div>
+            <h2>Create New Post</h2>
+            <p>Share resources and announcements</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="messages-wrap" style="padding:30px;overflow:auto">
+        <div class="post-form-container">
+          <form id="new-post-form" class="post-form">
+            <div class="form-group">
+              <label for="topic">Topic Category</label>
+              <select id="topic" required>
+                <option value="">Select a topic</option>
+                <option value="math">📐 Math</option>
+                <option value="science">🔬 Science</option>
+                <option value="history">🏛️ History</option>
+                <option value="english">📖 English</option>
+                <option value="art">🎨 Art</option>
+                <option value="other">📌 Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="title">Post Title</label>
+              <input type="text" id="title" placeholder="Enter an engaging title..." required />
+            </div>
+
+            <div class="form-group">
+              <label for="content">Content</label>
+              <textarea id="content" placeholder="Write your post content here..." rows="8" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="tags">Tags (optional)</label>
+              <input type="text" id="tags" placeholder="lesson, homework, resources (comma separated)" />
+            </div>
+
+            <button type="submit" class="submit-btn">📤 Publish Post</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel - Recent Posts -->
+    <aside class="details">
+      <h3>RECENT POSTS</h3>
+      <div id="recent-posts-list" style="display:flex;flex-direction:column;gap:12px">
+        <!-- Recent posts will load here -->
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // Navigation
+    document.querySelectorAll('.chat-item').forEach(item => {
+      item.addEventListener('click', function() {
+        const page = this.getAttribute('data-page');
+        if (page && page !== 'newpost.html') {
+          window.location.href = page;
+        }
+      });
+    });
+
+    // Load recent posts in sidebar
+    function loadRecentPosts() {
+      const container = document.getElementById('recent-posts-list');
+      const posts = JSON.parse(localStorage.getItem('posts')) || [];
+      
+      if (posts.length === 0) {
+        container.innerHTML = '<div class="card"><p style="color:var(--muted);font-size:13px">No posts yet</p></div>';
+        return;
+      }
+
+      const recentPosts = posts.slice(-5).reverse();
+      container.innerHTML = '';
+      
+      recentPosts.forEach(post => {
+        const postCard = document.createElement('div');
+        postCard.className = 'card';
+        postCard.style.cursor = 'pointer';
+        postCard.innerHTML = `
+          <h4 style="margin:0 0 6px 0;font-size:14px;color:#e6eef6">${post.title}</h4>
+          <p style="margin:0;font-size:12px;color:var(--muted)">${post.topic} • ${post.date}</p>
+        `;
+        container.appendChild(postCard);
+      });
+    }
+
+    // Form submission
+    document.getElementById('new-post-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const topic = document.getElementById('topic').value;
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+      const tags = document.getElementById('tags').value.trim();
+
+      if (!topic || !title || !content) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      const newPost = {
+        topic,
+        title,
+        content,
+        tags: tags.split(',').map(t => t.trim()).filter(t => t),
+        author: 'Teacher',
+        date: new Date().toLocaleDateString()
+      };
+
+      let posts = JSON.parse(localStorage.getItem('posts')) || [];
+      posts.push(newPost);
+      localStorage.setItem('posts', JSON.stringify(posts));
+
+      // Show success message
+      const btn = this.querySelector('.submit-btn');
+      btn.textContent = '✅ Published!';
+      btn.style.background = '#10b981';
+      
+      setTimeout(() => {
+        btn.textContent = '📤 Publish Post';
+        btn.style.background = '';
+      }, 2000);
+
+      // Reset form
+      this.reset();
+      loadRecentPosts();
+    });
+
+    loadRecentPosts();
+  </script>
+
   <style>
+    .post-form-container {
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .post-form {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #e6eef6;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: #e6eef6;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--muted);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 150px;
+      line-height: 1.6;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59,130,246,0.3);
+    }
+  </style>
+</body>
+</html>
     body, html {
       margin: 0;
       padding: 0;
@@ -283,10 +561,10 @@
 <body>
   <aside class="sidebar">
     <div class="avatar">👤</div>
-    <div class="username">Hmouda</div>
+    <div class="username">Rabie</div>
     <nav class="nav-buttons">
       <button id="btn-student-tools">Student Tools 📚</button>
-      <button id="btn-chat-gata">Chat with GATA 🐱</button>
+      <button id="btn-chat-gata">Chat with Sage 🐱</button>
       <button id="btn-logout">Logout 👋</button>
       <button id="btn-new-post">New Post 📝</button>
     </nav>

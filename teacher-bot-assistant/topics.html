@@ -4,7 +4,349 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Teacher Tools - Subjects and Lessons</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">CH</div>
+        <h2 style="margin:0;font-size:18px;color:#fff">Chat</h2>
+      </div>
+      <div class="search">
+        <span>🔍</span>
+        <span>Search</span>
+      </div>
+      <div class="chats">
+        <div class="chat-item" data-page="index.html">
+          <div class="avatar">🧙</div>
+          <div class="meta">
+            <div class="name">Sage - AI Assistant</div>
+            <div class="last">Let me help you with that...</div>
+          </div>
+        </div>
+        <div class="chat-item" data-page="login.html">
+          <div class="avatar">👤</div>
+          <div class="meta">
+            <div class="name">Profile / Logout</div>
+            <div class="last">View your profile</div>
+          </div>
+        </div>
+        <div class="chat-item active" data-page="topics.html">
+          <div class="avatar">📚</div>
+          <div class="meta">
+            <div class="name">Teacher Tools</div>
+            <div class="last">Browse topics and resources</div>
+          </div>
+        </div>
+        <div class="chat-item" data-page="newpost.html">
+          <div class="avatar">📝</div>
+          <div class="meta">
+            <div class="name">New Post</div>
+            <div class="last">Create a new post...</div>
+          </div>
+        </div>
+        <div class="chat-item" data-page="classrooms.html">
+          <div class="avatar">🏫</div>
+          <div class="meta">
+            <div class="name">Class Chat Rooms</div>
+            <div class="last">Join your class</div>
+          </div>
+        </div>
+        <div class="chat-item" data-page="newstudent.html">
+          <div class="avatar">🎓</div>
+          <div class="meta">
+            <div class="name">Students</div>
+            <div class="last">Add new student</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="chat-area">
+      <div class="topbar">
+        <div class="title">
+          <div>
+            <h2>📚 Teacher Tools & Resources</h2>
+            <p>Browse subjects, lessons, and teaching materials</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="messages-wrap" style="padding:30px;overflow:auto">
+        <div class="subject-grid" id="subject-container">
+          <!-- Subjects will load here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <aside class="details">
+      <h3>QUICK FILTERS</h3>
+      <div class="card">
+        <h4 style="margin:0 0 12px 0;font-size:14px">Filter by Subject</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="filter-btn" data-filter="all">All Subjects</button>
+          <button class="filter-btn" data-filter="math">📐 Math</button>
+          <button class="filter-btn" data-filter="science">🔬 Science</button>
+          <button class="filter-btn" data-filter="history">🏛️ History</button>
+          <button class="filter-btn" data-filter="literature">📚 Literature</button>
+          <button class="filter-btn" data-filter="technology">💻 Technology</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const topicDatabase = {
+      math: {
+        topics: [
+          { title: "Algebra Fundamentals", teacher: "Mr. Smith", icon: "📐" },
+          { title: "Geometry & Shapes", teacher: "Ms. Johnson", icon: "🔺" },
+          { title: "Trigonometry", teacher: "Mr. Lee", icon: "📊" },
+          { title: "Calculus Basics", teacher: "Dr. Brown", icon: "∫" }
+        ],
+        icon: "📐",
+        color: "#3b82f6"
+      },
+      science: {
+        topics: [
+          { title: "Physics Laws", teacher: "Dr. Brown", icon: "⚡" },
+          { title: "Chemistry Elements", teacher: "Dr. Green", icon: "⚗️" },
+          { title: "Biology & Life", teacher: "Dr. White", icon: "🧬" },
+          { title: "Earth Science", teacher: "Ms. Clark", icon: "🌍" }
+        ],
+        icon: "🔬",
+        color: "#10b981"
+      },
+      history: {
+        topics: [
+          { title: "World War II", teacher: "Mrs. Davis", icon: "🎖️" },
+          { title: "Ancient Civilizations", teacher: "Mr. Wilson", icon: "🏛️" },
+          { title: "Medieval Times", teacher: "Ms. Martinez", icon: "⚔️" },
+          { title: "Modern History", teacher: "Dr. Taylor", icon: "📰" }
+        ],
+        icon: "🏛️",
+        color: "#f59e0b"
+      },
+      literature: {
+        topics: [
+          { title: "Poetry Analysis", teacher: "Ms. Clark", icon: "✍️" },
+          { title: "Classic Novels", teacher: "Mr. Lewis", icon: "📖" },
+          { title: "Drama & Theatre", teacher: "Mrs. Walker", icon: "🎭" },
+          { title: "Creative Writing", teacher: "Ms. Harris", icon: "📝" }
+        ],
+        icon: "📚",
+        color: "#8b5cf6"
+      },
+      technology: {
+        topics: [
+          { title: "Programming Basics", teacher: "Dr. Allen", icon: "💻" },
+          { title: "Web Development", teacher: "Ms. Young", icon: "🌐" },
+          { title: "Cybersecurity", teacher: "Mr. King", icon: "🔒" },
+          { title: "Data Science", teacher: "Dr. Chen", icon: "📊" }
+        ],
+        icon: "💻",
+        color: "#ec4899"
+      }
+    };
+
+    function createSubjectCard(subjectName, subjectData) {
+      const card = document.createElement('div');
+      card.className = 'subject-card';
+      card.setAttribute('data-subject', subjectName);
+
+      const header = document.createElement('div');
+      header.className = 'subject-header';
+      header.style.background = `linear-gradient(135deg, ${subjectData.color}, ${subjectData.color}dd)`;
+      header.innerHTML = `
+        <div class="subject-icon">${subjectData.icon}</div>
+        <h3>${subjectName.charAt(0).toUpperCase() + subjectName.slice(1)}</h3>
+      `;
+
+      const lessons = document.createElement('div');
+      lessons.className = 'lessons-list';
+
+      subjectData.topics.forEach(topic => {
+        const lesson = document.createElement('div');
+        lesson.className = 'lesson-item';
+        lesson.innerHTML = `
+          <div class="lesson-icon">${topic.icon}</div>
+          <div class="lesson-info">
+            <div class="lesson-title">${topic.title}</div>
+            <div class="lesson-teacher">👨‍🏫 ${topic.teacher}</div>
+          </div>
+        `;
+        lessons.appendChild(lesson);
+      });
+
+      card.appendChild(header);
+      card.appendChild(lessons);
+      return card;
+    }
+
+    function loadSubjects(filter = 'all') {
+      const container = document.getElementById('subject-container');
+      container.innerHTML = '';
+
+      for (const subject in topicDatabase) {
+        if (filter === 'all' || filter === subject) {
+          const card = createSubjectCard(subject, topicDatabase[subject]);
+          container.appendChild(card);
+        }
+      }
+    }
+
+    // Navigation
+    document.querySelectorAll('.chat-item').forEach(item => {
+      item.addEventListener('click', function() {
+        const page = this.getAttribute('data-page');
+        if (page && page !== 'topics.html') {
+          window.location.href = page;
+        }
+      });
+    });
+
+    // Filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        loadSubjects(filter);
+      });
+    });
+
+    loadSubjects();
+  </script>
+
   <style>
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      width: 100%;
+    }
+
+    .subject-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .subject-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .subject-header {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .subject-icon {
+      font-size: 36px;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+    }
+
+    .subject-header h3 {
+      margin: 0;
+      font-size: 22px;
+      color: white;
+      font-weight: 700;
+    }
+
+    .lessons-list {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .lesson-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.03);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .lesson-item:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+      transform: translateX(4px);
+    }
+
+    .lesson-icon {
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+    }
+
+    .lesson-info {
+      flex: 1;
+    }
+
+    .lesson-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #e6eef6;
+      margin-bottom: 4px;
+    }
+
+    .lesson-teacher {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .filter-btn {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      color: #e6eef6;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--accent);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+  </style>
+</body>
+</html>
     body, html {
       margin: 0;
       padding: 20px;
