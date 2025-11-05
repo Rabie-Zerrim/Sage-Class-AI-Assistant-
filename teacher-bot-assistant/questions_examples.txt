@@ -1,0 +1,19 @@
+Here are example questions you can ask the bot:
+
+1. Is there a specific topic you'd like to focus on?
+2. Would you like some tips on how to engage this student?
+3. Do you want suggestions for other learning styles?
+4. Feel free to tell me more about the student's interests!
+5. Could you please specify the student's learning style: visual, auditory, or kinesthetic?
+6. Would you like more resources on a specific topic or explore a different topic?
+7. Can you help me create a lesson plan for a student?
+8. How can I create a new post?
+9. What teaching methods work best for visual learners?
+10. Suggest some videos and slides for math.
+11. How do I engage auditory learners effectively?
+12. What activities are good for kinesthetic learners?
+13. Can you provide a personalized lesson plan for Alice on science?
+14. What are some foundational topics in history?
+15. How can I improve student engagement in my class?
+
+Use these questions to interact with the bot and get personalized teaching assistance.

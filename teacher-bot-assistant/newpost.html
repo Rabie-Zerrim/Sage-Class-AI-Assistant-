@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>New Post - Teacher Bot Assistant</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      height: 100vh;
+      display: flex;
+      color: #333;
+    }
+    .sidebar {
+      width: 220px;
+      background-color: #3f51b5;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      color: white;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    }
+    .avatar {
+      font-size: 56px;
+      margin-bottom: 10px;
+      background: #5c6bc0;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+    }
+    .username {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 30px;
+      user-select: none;
+    }
+    .nav-buttons button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background-color: #7986cb;
+      cursor: pointer;
+      font-size: 15px;
+      color: white;
+      font-weight: 600;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .nav-buttons button:hover {
+      background-color: #5c6bc0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    .main-content {
+      flex-grow: 1;
+      padding: 40px 50px;
+      background-color: white;
+      overflow-y: auto;
+      display: flex;
+      gap: 40px;
+      box-sizing: border-box;
+      align-items: flex-start;
+    }
+    .form-container {
+      flex: 1;
+      max-width: 450px;
+      background: #fafafa;
+      padding: 30px 35px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .form-container:hover {
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+    h1 {
+      color: #3f51b5;
+      margin-bottom: 25px;
+      font-weight: 700;
+      font-size: 28px;
+      user-select: none;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 16px;
+      color: #555;
+      user-select: none;
+    }
+    select, input[type="text"], textarea {
+      width: 100%;
+      padding: 14px 18px;
+      margin-top: 8px;
+      border-radius: 12px;
+      border: 1.5px solid #ccc;
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-sizing: border-box;
+      outline-offset: 2px;
+    }
+    select:focus, input[type="text"]:focus, textarea:focus {
+      border-color: #3f51b5;
+      box-shadow: 0 0 8px rgba(63,81,181,0.4);
+      outline: none;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    button.submit-btn {
+      margin-top: 30px;
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      font-size: 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 6px 15px rgba(63,81,181,0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    button.submit-btn:hover {
+      background-color: #2c387e;
+      box-shadow: 0 8px 25px rgba(44,56,126,0.6);
+    }
+    .posts-container {
+      flex: 1.5;
+      max-width: 800px;
+      background: #f9f9fb;
+      border-radius: 25px;
+      padding: 35px 40px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      height: fit-content;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .posts-header {
+      font-weight: 800;
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: #3f51b5;
+      letter-spacing: 0.7px;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .filter-controls {
+      display: flex;
+      gap: 10px;
+      margin-left: auto;
+      align-items: center;
+    }
+    .filter-controls select,
+    .filter-controls input[type="text"] {
+      padding: 10px 15px;
+      border-radius: 12px;
+      border: 1.5px solid #ccc;
+      font-size: 15px;
+      font-family: inherit;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      outline-offset: 2px;
+      width: 180px;
+    }
+    .filter-controls input[type="text"]:focus,
+    .filter-controls select:focus {
+      border-color: #3f51b5;
+      box-shadow: 0 0 8px rgba(63,81,181,0.4);
+      outline: none;
+    }
+    .filter-controls button {
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: none;
+      background-color: #3f51b5;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 15px;
+      box-shadow: 0 4px 12px rgba(63,81,181,0.5);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .filter-controls button:hover {
+      background-color: #2c387e;
+      box-shadow: 0 6px 18px rgba(44,56,126,0.7);
+    }
+    .week-group {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      background: white;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .week-group:hover {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    .week-header {
+      background: #3f51b5;
+      color: white;
+      padding: 18px 25px;
+      font-weight: 800;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 25px 25px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 20px;
+      letter-spacing: 0.7px;
+      transition: background-color 0.3s ease;
+    }
+    .week-header:hover {
+      background-color: #2c387e;
+    }
+    .week-content {
+      padding: 20px 25px;
+      display: none;
+    }
+    .post-card {
+      border-left: 7px solid #3f51b5;
+      padding: 18px 25px;
+      margin-bottom: 18px;
+      cursor: default;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;
+      background: white;
+    }
+    .post-card:hover {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+    .post-title {
+      font-weight: 800;
+      color: #2c3e50;
+      margin: 0 0 10px 0;
+      font-size: 20px;
+      letter-spacing: 0.4px;
+    }
+    .post-meta {
+      font-size: 0.95em;
+      color: #7f8c8d;
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+    .post-summary {
+      margin: 0;
+      color: #34495e;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .toggle-icon {
+      font-weight: 900;
+      font-size: 20px;
+      user-select: none;
+      transition: transform 0.3s ease;
+    }
+    .toggle-icon.open {
+      transform: rotate(45deg);
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="avatar">👤</div>
+    <div class="username">Hmouda</div>
+    <nav class="nav-buttons">
+      <button id="btn-student-tools">Student Tools 📚</button>
+      <button id="btn-chat-gata">Chat with GATA 🐱</button>
+      <button id="btn-logout">Logout 👋</button>
+      <button id="btn-new-post">New Post 📝</button>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <section class="form-container">
+      <h1>Create New Post</h1>
+      <form id="new-post-form">
+        <label for="topic">Topic</label>
+        <select id="topic" required>
+          <option value="">Select a topic</option>
+          <option value="math">Math</option>
+          <option value="science">Science</option>
+          <option value="history">History</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label for="title">Post Title</label>
+        <input type="text" id="title" placeholder="Enter post title" required />
+
+        <label for="content">Content</label>
+        <textarea id="content" placeholder="Write your post content here..." required></textarea>
+
+        <button type="submit" class="submit-btn">Submit Post</button>
+      </form>
+    </section>
+    <section class="posts-container">
+      <div class="posts-header">
+        Your Posts
+        <div class="filter-controls">
+          <select id="filter-topic">
+            <option value="">All Topics</option>
+            <option value="math">Math</option>
+            <option value="science">Science</option>
+            <option value="history">History</option>
+            <option value="other">Other</option>
+          </select>
+          <input type="text" id="search-posts" placeholder="Search posts..." />
+          <button id="reset-filters">Reset</button>
+        </div>
+      </div>
+      <div id="posts-list">
+        <!-- Posts will be loaded here -->
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Navigation buttons
+    document.getElementById('btn-student-tools').addEventListener('click', function() {
+      window.location.href = 'topics.html';
+    });
+    document.getElementById('btn-chat-gata').addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
+    document.getElementById('btn-logout').addEventListener('click', function() {
+      window.location.href = 'login.html';
+    });
+    document.getElementById('btn-new-post').addEventListener('click', function() {
+      window.location.href = 'newpost.html';
+    });
+
+    // Helper function to group posts by week range string
+    function getWeekRange(date) {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diffToMonday = d.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(d.setDate(diffToMonday));
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+
+      function formatDate(dt) {
+        return (dt.getMonth() + 1).toString().padStart(2, '0') + '/' + dt.getDate().toString().padStart(2, '0');
+      }
+
+      return `Week ${formatDate(monday)} - ${formatDate(sunday)}`;
+    }
+
+    // Load posts from localStorage and display grouped by week
+    function loadPosts(filterTopic = '', searchTerm = '') {
+      const postsList = document.getElementById('posts-list');
+      postsList.innerHTML = '';
+
+      let posts = JSON.parse(localStorage.getItem('posts')) || [];
+      if (posts.length === 0) {
+        postsList.textContent = 'No posts available.';
+        return;
+      }
+
+      // Filter posts by topic
+      if (filterTopic) {
+        posts = posts.filter(post => post.topic === filterTopic);
+      }
+
+      // Filter posts by search term (title or content)
+      if (searchTerm) {
+        const lowerSearch = searchTerm.toLowerCase();
+        posts = posts.filter(post =>
+          post.title.toLowerCase().includes(lowerSearch) ||
+          post.content.toLowerCase().includes(lowerSearch)
+        );
+      }
+
+      if (posts.length === 0) {
+        postsList.textContent = 'No posts match the filter criteria.';
+        return;
+      }
+
+      // Sort posts by date descending
+      posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // Group posts by week range
+      const groupedPosts = {};
+      posts.forEach(post => {
+        const weekRange = getWeekRange(post.date);
+        if (!groupedPosts[weekRange]) {
+          groupedPosts[weekRange] = [];
+        }
+        groupedPosts[weekRange].push(post);
+      });
+
+      // Create DOM elements for each week group
+      for (const week in groupedPosts) {
+        const weekGroup = document.createElement('div');
+        weekGroup.className = 'week-group';
+
+        const weekHeader = document.createElement('div');
+        weekHeader.className = 'week-header';
+        weekHeader.textContent = week;
+
+        const toggleIcon = document.createElement('span');
+        toggleIcon.className = 'toggle-icon';
+        toggleIcon.textContent = '+';
+        weekHeader.appendChild(toggleIcon);
+
+        const weekContent = document.createElement('div');
+        weekContent.className = 'week-content';
+
+        groupedPosts[week].forEach(post => {
+          const postCard = document.createElement('div');
+          postCard.className = 'post-card';
+
+          const postTitle = document.createElement('h3');
+          postTitle.className = 'post-title';
+          postTitle.textContent = post.title;
+
+          const postMeta = document.createElement('div');
+          postMeta.className = 'post-meta';
+          postMeta.textContent = `By ${post.author} on ${post.date}`;
+
+          const postSummary = document.createElement('p');
+          postSummary.className = 'post-summary';
+          postSummary.textContent = post.content;
+
+          postCard.appendChild(postTitle);
+          postCard.appendChild(postMeta);
+          postCard.appendChild(postSummary);
+
+          weekContent.appendChild(postCard);
+        });
+
+        weekGroup.appendChild(weekHeader);
+        weekGroup.appendChild(weekContent);
+        postsList.appendChild(weekGroup);
+
+        // Toggle week content visibility
+        weekHeader.addEventListener('click', () => {
+          if (weekContent.style.display === 'block') {
+            weekContent.style.display = 'none';
+            toggleIcon.classList.remove('open');
+            toggleIcon.textContent = '+';
+          } else {
+            weekContent.style.display = 'block';
+            toggleIcon.classList.add('open');
+            toggleIcon.textContent = '−';
+          }
+        });
+      }
+    }
+
+    // Filter controls event handlers
+    const filterTopic = document.getElementById('filter-topic');
+    const searchPosts = document.getElementById('search-posts');
+    const resetFilters = document.getElementById('reset-filters');
+
+    function applyFilters() {
+      const topic = filterTopic.value;
+      const searchTerm = searchPosts.value.trim();
+      loadPosts(topic, searchTerm);
+    }
+
+    filterTopic.addEventListener('change', applyFilters);
+    searchPosts.addEventListener('input', applyFilters);
+    resetFilters.addEventListener('click', () => {
+      filterTopic.value = '';
+      searchPosts.value = '';
+      loadPosts();
+    });
+
+    // Form submission handler
+    document.getElementById('new-post-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const topic = document.getElementById('topic').value;
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+
+      if (!topic || !title || !content) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      const newPost = {
+        topic,
+        title,
+        content,
+        author: 'Teacher', // Placeholder author
+        date: new Date().toLocaleDateString()
+      };
+
+      // Get existing posts from localStorage or initialize empty array
+      let posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+      // Add new post
+      posts.push(newPost);
+
+      // Save back to localStorage
+      localStorage.setItem('posts', JSON.stringify(posts));
+
+      alert('Post submitted successfully!');
+
+      // Reset form
+      this.reset();
+
+      // Reload posts list with current filters
+      applyFilters();
+    });
+
+    // Initial load of posts
+    loadPosts();
+  </script>
+</body>
+</html>

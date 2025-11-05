@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Add New Student</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            padding: 8px;
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .success-message {
+            color: green;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add New Student</h1>
+    <form id="new-student-form">
+        <label for="student-name">Student Name:</label>
+        <input type="text" id="student-name" name="studentName" required />
+
+        <label for="learning-style">Preferred Learning Style:</label>
+        <select id="learning-style" name="learningStyle" required>
+            <option value="">Select learning style</option>
+            <option value="visual">Visual</option>
+            <option value="auditory">Auditory</option>
+            <option value="kinesthetic">Kinesthetic</option>
+        </select>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="3" max="120" required />
+
+        <label for="class">Class/Grade:</label>
+        <input type="text" id="class" name="class" required />
+
+        <label for="favorite-subject">Favorite Subject:</label>
+        <input type="text" id="favorite-subject" name="favoriteSubject" />
+
+        <label for="notes">Additional Notes:</label>
+        <textarea id="notes" name="notes" rows="4"></textarea>
+
+        <button type="submit">Add Student</button>
+    </form>
+    <div class="success-message" id="success-message" style="display:none;">
+        Student added successfully!
+    </div>
+
+    <script>
+        const form = document.getElementById('new-student-form');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const studentName = document.getElementById('student-name').value.trim().toLowerCase();
+            const learningStyle = document.getElementById('learning-style').value;
+            const age = document.getElementById('age').value;
+            const studentClass = document.getElementById('class').value.trim();
+            const favoriteSubject = document.getElementById('favorite-subject').value.trim();
+            const notes = document.getElementById('notes').value.trim();
+
+            if (!studentName || !learningStyle || !age || !studentClass) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Save new student data to localStorage (or send to backend if applicable)
+            let students = JSON.parse(localStorage.getItem('students')) || {};
+            students[studentName] = {
+                learningStyle: learningStyle,
+                age: age,
+                class: studentClass,
+                favoriteSubject: favoriteSubject,
+                notes: notes
+            };
+            localStorage.setItem('students', JSON.stringify(students));
+
+            successMessage.style.display = 'block';
+            form.reset();
+        });
+    </script>
+</body>
+</html>

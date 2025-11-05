@@ -1,0 +1,6 @@
+- [x] Modify script.js to add greeting responses
+- [x] Update learning style prompt to only trigger on relevant queries
+- [x] Improve keyword detection with more variations
+- [x] Update styles.css for better chat message styling
+- [x] Test the changes
+- [x] Add interactive lesson plan creation feature

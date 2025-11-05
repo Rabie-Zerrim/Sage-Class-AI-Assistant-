@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teacher Tools - Topics</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 28px;
+    }
+    .topics-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+    .topic-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 200px;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      text-align: center;
+      padding: 15px;
+      border: 1px solid #ddd;
+    }
+    .topic-card:hover {
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transform: translateY(-5px);
+    }
+    .topic-thumbnail {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+    }
+    .topic-title {
+      font-weight: 700;
+      font-size: 18px;
+      color: #34495e;
+    }
+    .slides-container {
+      margin-top: 40px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .slides-container h2 {
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 24px;
+      color: #2c3e50;
+    }
+    .slide-image {
+      width: 180px;
+      height: 120px;
+      object-fit: cover;
+      margin-right: 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .slide-image:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <h1>Teacher Tools - Topics</h1>
+  <div class="topics-container" id="topics-container">
+    <!-- Topic cards will be inserted here -->
+  </div>
+  <div class="slides-container" id="slides-container" style="display:none;">
+    <h2>Lecture Slides</h2>
+    <div id="slides-list" style="display:flex;"></div>
+  </div>
+
+  <div class="posts-container" id="posts-container" style="margin-top: 40px; max-width: 900px; margin-left: auto; margin-right: auto;">
+    <h2>Posts</h2>
+    <div id="posts-list"></div>
+  </div>
+
+  <script>
+    const topics = [
+      {
+        name: 'Math',
+        thumbnail: 'https://images.unsplash.com/photo-1555529669-0a1a7a3a7a7a?auto=format&fit=crop&w=400&q=80',
+        slides: [
+          'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=400&q=80',
+          'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&q=80',
+          'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80'
+        ],
+        posts: [
+          {
+            title: "Understanding Algebraic Expressions",
+            author: "data dude",
+            date: "5/1/24",
+            summary: "A detailed explanation of algebraic expressions and how to simplify them."
+          },
+          {
+            title: "Geometry Basics",
+            author: "math teacher",
+            date: "4/20/24",
+            summary: "Introduction to basic geometry concepts including shapes and angles."
+          }
+        ]
+      },
+      {
+        name: 'Science',
+        thumbnail: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80',
+        slides: [
+          'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80',
+          'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80',
+          'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&q=80'
+        ],
+        posts: [
+          {
+            title: "Introduction to Physics",
+            author: "science prof",
+            date: "4/25/24",
+            summary: "Basics of physics including motion, forces, and energy."
+          },
+          {
+            title: "Chemistry Fundamentals",
+            author: "chemistry teacher",
+            date: "4/18/24",
+            summary: "Overview of chemical reactions and periodic table."
+          }
+        ]
+      },
+      {
+        name: 'History',
+        thumbnail: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80',
+        slides: [
+          'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80',
+          'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&q=80',
+          'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80'
+        ],
+        posts: [
+          {
+            title: "World War II Overview",
+            author: "history buff",
+            date: "4/30/24",
+            summary: "Key events and impacts of World War II."
+          },
+          {
+            title: "Ancient Civilizations",
+            author: "archaeologist",
+            date: "4/22/24",
+            summary: "Exploring ancient cultures and their contributions."
+          }
+        ]
+      }
+    ];
+    // Load posts from localStorage and merge with topics posts
+    const savedPosts = JSON.parse(localStorage.getItem('posts')) || [];
+    savedPosts.forEach(post => {
+      const topic = topics.find(t => t.name.toLowerCase() === post.topic.toLowerCase());
+      if (topic) {
+        if (!topic.posts) {
+          topic.posts = [];
+        }
+        topic.posts.push({
+          title: post.title,
+          author: post.author,
+          date: post.date,
+          summary: post.content
+        });
+      }
+    });
+
+    const topicsContainer = document.getElementById('topics-container');
+    const slidesContainer = document.getElementById('slides-container');
+    const slidesList = document.getElementById('slides-list');
+
+    function clearSlides() {
+      slidesList.innerHTML = '';
+      slidesContainer.style.display = 'none';
+    }
+
+    function showSlides(slides) {
+      clearSlides();
+      slides.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.className = 'slide-image';
+        img.alt = 'Lecture Slide';
+        img.addEventListener('click', () => {
+          window.open(url, '_blank');
+        });
+        slidesList.appendChild(img);
+      });
+      slidesContainer.style.display = 'block';
+    }
+
+    function createTopicCard(topic) {
+      const card = document.createElement('div');
+      card.className = 'topic-card';
+      const img = document.createElement('img');
+      img.src = topic.thumbnail;
+      img.alt = topic.name;
+      img.className = 'topic-thumbnail';
+      const title = document.createElement('div');
+      title.className = 'topic-title';
+      title.textContent = topic.name;
+      card.appendChild(img);
+      card.appendChild(title);
+      card.addEventListener('click', () => {
+        showSlides(topic.slides);
+        showPosts(topic.posts);
+      });
+      return card;
+    }
+
+    topics.forEach(topic => {
+      const card = createTopicCard(topic);
+      topicsContainer.appendChild(card);
+    });
+
+    function showPosts(posts) {
+      const postsList = document.getElementById('posts-list');
+      postsList.innerHTML = ''; // Clear previous posts
+
+      if (!posts || posts.length === 0) {
+        postsList.textContent = 'No posts available for this topic.';
+        return;
+      }
+
+      posts.forEach(post => {
+        const postCard = document.createElement('div');
+        postCard.className = 'post-card';
+        postCard.style = `
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          padding: 15px;
+          margin-bottom: 15px;
+          border-left: 5px solid #4a90e2;
+          cursor: default;
+        `;
+
+        const title = document.createElement('h3');
+        title.textContent = post.title;
+        title.style = 'margin: 0 0 8px 0; color: #2c3e50;';
+
+        const meta = document.createElement('div');
+        meta.textContent = `By ${post.author} on ${post.date}`;
+        meta.style = 'font-size: 0.9em; color: #7f8c8d; margin-bottom: 10px;';
+
+        const summary = document.createElement('p');
+        summary.textContent = post.summary;
+        summary.style = 'margin: 0; color: #34495e;';
+
+        postCard.appendChild(title);
+        postCard.appendChild(meta);
+        postCard.appendChild(summary);
+
+        postsList.appendChild(postCard);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teacher Tools - Subjects and Lessons</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 28px;
+      text-align: center;
+    }
+    .subject-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+    .subject {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 250px;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      text-align: center;
+      padding: 15px;
+      border: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .subject:hover {
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transform: translateY(-5px);
+    }
+    .subject-thumbnail {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      background-color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 48px;
+      color: #888;
+    }
+    .subject-title {
+      font-weight: 700;
+      font-size: 20px;
+      color: #34495e;
+      margin: 0 0 10px 0;
+    }
+    .lessons {
+      width: 100%;
+      margin-top: 10px;
+      padding-left: 0;
+      list-style: none;
+    }
+    .lesson {
+      background: #e8f0fe;
+      border-radius: 10px;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: default;
+    }
+    .lesson-thumbnail {
+      width: 40px;
+      height: 40px;
+      background-color: #c0c8f8;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      color: #4a4a4a;
+      flex-shrink: 0;
+    }
+    .lesson-info {
+      flex-grow: 1;
+    }
+    .lesson-title {
+      font-weight: 600;
+      margin: 0;
+      font-size: 16px;
+    }
+    .lesson-teacher {
+      font-size: 14px;
+      color: #666;
+      font-style: italic;
+      margin: 2px 0 0 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Teacher Tools</h1>
+  <div class="subject-container" id="subject-container">
+    <!-- Subjects and lessons will be inserted here -->
+  </div>
+
+  <script>
+    const topicDatabase = {
+      math: {
+        topics: [
+          { title: "Algebra", teacher: "Mr. Smith" },
+          { title: "Geometry", teacher: "Ms. Johnson" },
+          { title: "Trigonometry", teacher: "Mr. Lee" }
+        ],
+        icon: "∑"
+      },
+      science: {
+        topics: [
+          { title: "Physics", teacher: "Dr. Brown" },
+          { title: "Chemistry", teacher: "Dr. Green" },
+          { title: "Biology", teacher: "Dr. White" }
+        ],
+        icon: "⚛"
+      },
+      history: {
+        topics: [
+          { title: "World War II", teacher: "Mrs. Davis" },
+          { title: "Ancient Civilizations", teacher: "Mr. Wilson" },
+          { title: "Medieval Times", teacher: "Ms. Martinez" }
+        ],
+        icon: "🏰"
+      },
+      literature: {
+        topics: [
+          { title: "Poetry", teacher: "Ms. Clark" },
+          { title: "Novels", teacher: "Mr. Lewis" },
+          { title: "Drama", teacher: "Mrs. Walker" }
+        ],
+        icon: "📚"
+      },
+      technology: {
+        topics: [
+          { title: "Computer Science", teacher: "Dr. Allen" },
+          { title: "Information Systems", teacher: "Ms. Young" },
+          { title: "Cybersecurity", teacher: "Mr. King" }
+        ],
+        icon: "💻"
+      }
+    };
+
+    function createSubjectElement(subjectName, subjectData) {
+      const subjectDiv = document.createElement('div');
+      subjectDiv.className = 'subject';
+
+      const thumbnail = document.createElement('div');
+      thumbnail.className = 'subject-thumbnail';
+      thumbnail.textContent = subjectData.icon;
+
+      const title = document.createElement('h2');
+      title.className = 'subject-title';
+      title.textContent = subjectName.charAt(0).toUpperCase() + subjectName.slice(1);
+
+      const lessonsList = document.createElement('ul');
+      lessonsList.className = 'lessons';
+
+      subjectData.topics.forEach(lesson => {
+        const lessonItem = document.createElement('li');
+        lessonItem.className = 'lesson';
+
+        const lessonThumbnail = document.createElement('div');
+        lessonThumbnail.className = 'lesson-thumbnail';
+        lessonThumbnail.textContent = '📘';
+
+        const lessonInfo = document.createElement('div');
+        lessonInfo.className = 'lesson-info';
+
+        const lessonTitle = document.createElement('p');
+        lessonTitle.className = 'lesson-title';
+        lessonTitle.textContent = lesson.title;
+
+        const lessonTeacher = document.createElement('p');
+        lessonTeacher.className = 'lesson-teacher';
+        lessonTeacher.textContent = `Teacher: ${lesson.teacher}`;
+
+        lessonInfo.appendChild(lessonTitle);
+        lessonInfo.appendChild(lessonTeacher);
+
+        lessonItem.appendChild(lessonThumbnail);
+        lessonItem.appendChild(lessonInfo);
+
+        lessonsList.appendChild(lessonItem);
+      });
+
+      subjectDiv.appendChild(thumbnail);
+      subjectDiv.appendChild(title);
+      subjectDiv.appendChild(lessonsList);
+
+      return subjectDiv;
+    }
+
+    function loadSubjects() {
+      const container = document.getElementById('subject-container');
+      container.innerHTML = '';
+
+      for (const subject in topicDatabase) {
+        const subjectElement = createSubjectElement(subject, topicDatabase[subject]);
+        container.appendChild(subjectElement);
+      }
+    }
+
+    window.onload = loadSubjects;
+  </script>
+</body>
+</html>
