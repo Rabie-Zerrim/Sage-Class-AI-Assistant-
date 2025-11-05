@@ -1,9 +1,13 @@
 # Class AI Assistant (Sage)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-blue.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.0+-orange.svg)](https://www.tensorflow.org/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-API-412991.svg)](https://openai.com/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-0.24+-F7931E.svg)](https://scikit-learn.org/)
 
 An AI-powered web application designed to assist teachers with educational tasks through Sage (Class Assistant AI), a chatbot that provides personalized teaching strategies, lesson plans, and educational resources.
 
@@ -47,14 +51,49 @@ An AI-powered web application designed to assist teachers with educational tasks
 ## Installation
 
 ### Prerequisites
-- A modern web browser (Chrome, Firefox, Safari, Edge)
-- No server-side dependencies required
+- Python 3.8 or higher
+- Node.js 16+ (for frontend development)
+- PostgreSQL or SQLite database
+- OpenAI API key (for AI features)
+- Modern web browser (Chrome, Firefox, Safari, Edge)
 
 ### Setup
-1. Clone or download the repository
-2. Navigate to the project directory
-3. Open `teacher-bot-assistant/index.html` in your web browser
-4. For login, use:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Rabie-Zerrim/Sage-Class-AI-Assistant-.git
+   cd Sage-Class-AI-Assistant-
+   ```
+
+2. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your OpenAI API key and database credentials
+   ```
+
+5. Run database migrations:
+   ```bash
+   python manage.py migrate
+   ```
+
+6. Start the development server:
+   ```bash
+   python app.py
+   ```
+
+7. Open your browser and navigate to `http://localhost:5000`
+
+8. For login, use:
    - Username: `teacher`
    - Password: `password123`
 

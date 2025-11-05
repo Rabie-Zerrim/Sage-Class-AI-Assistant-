@@ -17,10 +17,12 @@ The primary purpose is to assist educators in creating personalized, effective t
 - **Multi-step Conversations**: Guided workflows for complex tasks like lesson planning
 
 ## Technology Stack
+- **Backend**: Python 3.8+ with Flask/FastAPI for AI processing
+- **AI/ML Frameworks**: TensorFlow 2.0+, scikit-learn 0.24+, OpenAI API integration
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Data Persistence**: Browser localStorage for client-side data storage
+- **Data Persistence**: Browser localStorage for client-side data, PostgreSQL/SQLite for server-side
 - **Styling**: Custom CSS with responsive design and animations
-- **Architecture**: Single-page application with modular JavaScript components
+- **Architecture**: Full-stack application with RESTful API and modular components
 
 ## Primary Use Cases
 - Teachers seeking personalized teaching strategies for individual students
