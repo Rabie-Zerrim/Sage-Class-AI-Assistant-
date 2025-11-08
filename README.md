@@ -83,7 +83,59 @@ An AI-powered web application designed to assist teachers with educational tasks
 - Teacher-only upload/delete permissions
 - Student download access
 
-## 📚 Documentation
+## � Screenshots & Demo
+
+### 🎥 Video Demo
+Watch Sage in action! See how to summon and interact with the AI assistant:
+
+https://github.com/Rabie-Zerrim/Sage-Class-AI-Assistant-/assets/sage%20summon.mp4
+
+### 🖼️ Feature Screenshots
+
+#### 🤖 Add Student via Chat
+![Add Student Bot](assets/add%20student%20bot.png)
+![Add Student Sage](assets/add%20student%20sage.png)
+
+*Natural language student registration - just tell Sage the details!*
+
+#### 📚 Available Documentation & Resources
+![Available Docs](assets/available%20docs.png)
+
+*Access all documentation and learning materials in one place*
+
+#### 💬 Classroom Chat
+![Join Classroom Chat](assets/join%20classroom%20chat.png)
+
+*Collaborate with classmates and summon Sage for instant help*
+
+#### 📝 Create New Posts
+![New Post](assets/new%20post%20.png)
+
+*Share educational content organized by topics*
+
+#### 📅 Schedule Management
+![Schedule](assets/schedule.png)
+
+*Weekly class schedules with automatic notifications*
+
+#### 🌐 Wikipedia Integration
+![Wikipedia Scraper](assets/scraper%20wikipedia.png)
+
+*Ask any question and get instant Wikipedia answers with images*
+
+#### 📚 Teacher Course Management
+![Teacher Courses](assets/teacher%20courses.png)
+
+*Create and manage courses with ease*
+
+#### 🛠️ Teacher Tools Dashboard
+![Teacher Tools](assets/teacher%20tools.png)
+
+*Complete teacher dashboard with all management tools*
+
+---
+
+## �📚 Documentation
 
 - **[Quick Start Guide](QUICK_START.md)** - Get started in 3 easy steps
 - **[Sage Commands Reference](SAGE_COMMANDS_REFERENCE.md)** - Complete guide to all bot commands
