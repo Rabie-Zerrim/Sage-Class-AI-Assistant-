@@ -11,6 +11,28 @@
 
 An AI-powered web application designed to assist teachers with educational tasks through Sage (Class Assistant AI), a chatbot that provides personalized teaching strategies, lesson plans, and educational resources. Now with **advanced natural language processing** and **Wikipedia integration** for unlimited knowledge access!
 
+## 📑 Table of Contents
+
+- [🎯 Quick Start](#-quick-start)
+- [✨ Key Features](#-key-features)
+- [📸 Screenshots & Demo](#-screenshots--demo)
+- [📚 Documentation](#-documentation)
+- [Recent Updates](#recent-updates)
+- [🛠️ Installation](#️-installation)
+- [Usage](#usage)
+- [⚙️ Configuration](#️-configuration)
+- [🔧 API Documentation](#-api-documentation)
+- [🤝 Contributing](#-contributing)
+- [🐛 Known Issues & Limitations](#-known-issues--limitations)
+- [🚀 Future Enhancements](#-future-enhancements)
+- [📊 Project Stats](#-project-stats)
+- [📞 Support](#-support)
+- [🎓 Educational Use Cases](#-educational-use-cases)
+- [🏆 Acknowledgments](#-acknowledgments)
+- [📜 License](#-license)
+
+---
+
 ## 🎯 Quick Start
 
 **New to Sage?** Check out our [**Quick Start Guide**](QUICK_START.md) for a 3-step onboarding process!
@@ -88,13 +110,9 @@ An AI-powered web application designed to assist teachers with educational tasks
 ### 🎥 Video Demo
 Watch Sage in action! See how to summon and interact with the AI assistant:
 
-https://github.com/user-attachments/assets/sage-summon.mp4
+![Sage Demo Video](https://github.com/Rabie-Zerrim/Sage-Class-AI-Assistant-/assets/sage%20summon.mp4)
 
-<video src="assets/sage summon.mp4" controls style="max-width: 100%;">
-  Your browser does not support the video tag.
-</video>
-
-> **Note:** If the video doesn't play above, you can [download it here](assets/sage%20summon.mp4) or view it directly in the repository.
+> **📥 [Download the full demo video](assets/sage%20summon.mp4)** to see Sage in action locally!
 
 ### 🖼️ Feature Screenshots
 
