@@ -83,12 +83,18 @@ An AI-powered web application designed to assist teachers with educational tasks
 - Teacher-only upload/delete permissions
 - Student download access
 
-## � Screenshots & Demo
+## 📸 Screenshots & Demo
 
 ### 🎥 Video Demo
 Watch Sage in action! See how to summon and interact with the AI assistant:
 
-https://github.com/Rabie-Zerrim/Sage-Class-AI-Assistant-/assets/sage%20summon.mp4
+https://github.com/user-attachments/assets/sage-summon.mp4
+
+<video src="assets/sage summon.mp4" controls style="max-width: 100%;">
+  Your browser does not support the video tag.
+</video>
+
+> **Note:** If the video doesn't play above, you can [download it here](assets/sage%20summon.mp4) or view it directly in the repository.
 
 ### 🖼️ Feature Screenshots
 
