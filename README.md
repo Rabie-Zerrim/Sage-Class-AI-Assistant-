@@ -107,12 +107,17 @@ An AI-powered web application designed to assist teachers with educational tasks
 
 ## 📸 Screenshots & Demo
 
-### 🎥 Video Demo
+### 🎥 Live Demo
 Watch Sage in action! See how to summon and interact with the AI assistant:
 
-![Sage Demo Video](https://github.com/Rabie-Zerrim/Sage-Class-AI-Assistant-/assets/sage%20summon.mp4)
+![Sage Demo](assets/sage%20summon.gif)
 
-> **📥 [Download the full demo video](assets/sage%20summon.mp4)** to see Sage in action locally!
+**What you see in the demo:**
+- 🤖 Summoning Sage in the classroom chat
+- 💬 Natural language interactions
+- 🌐 Wikipedia integration with instant answers
+- 👥 Student management commands
+- 📚 Course creation and management
 
 ### 🖼️ Feature Screenshots
 
