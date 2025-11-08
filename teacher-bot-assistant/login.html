@@ -64,6 +64,17 @@
       font-size: 14px;
       display: none;
     }
+    .demo-credentials {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e8f4f8;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #333;
+    }
+    .demo-credentials strong {
+      color: #4a90e2;
+    }
   </style>
 </head>
 <body>
@@ -79,21 +90,42 @@
       <button type="submit">Login</button>
       <div class="error-message" id="error-message">Invalid username or password.</div>
     </form>
+    
+    <div class="demo-credentials">
+      <strong>📚 Demo Credentials:</strong><br>
+      Teacher: <code>teacher1</code> / <code>teacher123</code><br>
+      Student: <code>student1</code> / <code>student123</code>
+    </div>
   </div>
 
+  <script src="auth.js"></script>
   <script>
     document.getElementById('login-form').addEventListener('submit', function(e) {
       e.preventDefault();
 
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value.trim();
+      const errorMessage = document.getElementById('error-message');
 
-      // Simple hardcoded check for demo purposes
-      if (username === 'teacher' && password === 'password123') {
-        window.location.href = 'index.html';
+      // Use auth.js login function
+      const success = login(username, password);
+      
+      if (success) {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        
+        // Redirect based on role
+        if (user.role === 'teacher') {
+          window.location.href = 'teacher-dashboard.html';
+        } else {
+          window.location.href = 'index.html';
+        }
       } else {
-        const errorMessage = document.getElementById('error-message');
         errorMessage.style.display = 'block';
+        
+        // Hide error after 3 seconds
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+        }, 3000);
       }
     });
   </script>

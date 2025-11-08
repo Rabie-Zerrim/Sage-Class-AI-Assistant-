@@ -26,11 +26,11 @@
             <div class="last">Let me help you with that...</div>
           </div>
         </div>
-        <div class="chat-item" data-page="login.html">
-          <div class="avatar">👤</div>
+        <div class="chat-item" data-page="teacher-dashboard.html" id="teacher-dashboard-link">
+          <div class="avatar">�‍🏫</div>
           <div class="meta">
-            <div class="name">Profile / Logout</div>
-            <div class="last">View your profile</div>
+            <div class="name">Teacher Dashboard</div>
+            <div class="last">Manage courses & files</div>
           </div>
         </div>
         <div class="chat-item" data-page="topics.html">
@@ -54,7 +54,7 @@
             <div class="last">Join your class</div>
           </div>
         </div>
-        <div class="chat-item" data-page="newstudent.html">
+        <div class="chat-item" data-page="newstudent.html" id="students-link">
           <div class="avatar">🎓</div>
           <div class="meta">
             <div class="name">Students</div>
@@ -150,36 +150,41 @@
     <aside class="details">
       <h3>CHAT DETAILS</h3>
       
-      <div class="card">
-        <h4 style="margin:0 0 8px 0;font-size:14px">Photos and Videos</h4>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
-          <div style="background:#1f2933;border-radius:8px;aspect-ratio:1;display:flex;align-items:center;justify-content:center">🍕</div>
-          <div style="background:#1f2933;border-radius:8px;aspect-ratio:1;display:flex;align-items:center;justify-content:center">📊</div>
+      <div class="card" style="background: rgba(31, 41, 51, 0.6); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+          <h4 style="margin:0;font-size:14px;color:#fff">📸 Photos & Media</h4>
+          <span style="color: #60a5fa; font-size: 12px; cursor: pointer;" id="upload-media-btn">+ Upload</span>
+        </div>
+        <div id="media-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
+          <!-- Media will be loaded here -->
         </div>
       </div>
 
-      <div class="card">
-        <h4 style="margin:0 0 8px 0;font-size:14px">Shared Files</h4>
-        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
-          <div style="display:flex;gap:8px;align-items:center">
-            <span>📄</span>
-            <span>Lesson plan template.pdf</span>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <span>📄</span>
-            <span>Fraction worksheets.docx</span>
-          </div>
+      <div class="card" style="background: rgba(31, 41, 51, 0.6); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+          <h4 style="margin:0;font-size:14px;color:#fff">📁 Shared Files</h4>
+          <span style="color: #60a5fa; font-size: 12px; cursor: pointer;" id="upload-file-btn">+ Upload</span>
+        </div>
+        <div id="files-list" style="display:flex;flex-direction:column;gap:8px;font-size:13px;max-height:200px;overflow-y:auto">
+          <!-- Files will be loaded here -->
         </div>
       </div>
 
-      <div class="card">
-        <h4 style="margin:0 0 8px 0;font-size:14px">Shared Links</h4>
+      <div class="card" style="background: rgba(31, 41, 51, 0.6); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+        <h4 style="margin:0 0 10px 0;font-size:14px;color:#fff">📅 This Week's Schedule</h4>
+        <div id="week-schedule" style="font-size: 13px; color: #94a3b8;">
+          <!-- Schedule will be loaded here -->
+        </div>
+      </div>
+
+      <div class="card" style="background: rgba(31, 41, 51, 0.6); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+        <h4 style="margin:0 0 8px 0;font-size:14px;color:#fff">🔗 Shared Links</h4>
         <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
-          <div style="display:flex;gap:8px;align-items:center">
+          <div style="display:flex;gap:8px;align-items:center;color:#94a3b8">
             <span>🔗</span>
             <span>Khan Academy - Fractions</span>
           </div>
-          <div style="display:flex;gap:8px;align-items:center">
+          <div style="display:flex;gap:8px;align-items:center;color:#94a3b8">
             <span>🔗</span>
             <span>Math Learning Resources</span>
           </div>
@@ -190,6 +195,145 @@
       <div id="video-list" class="video-list" style="display:none"></div>
     </aside>
   </div>
+  
+  <!-- Hidden file input -->
+  <input type="file" id="hidden-file-input" multiple accept="image/*,application/pdf,.doc,.docx" style="display: none;">
+  <input type="file" id="hidden-media-input" multiple accept="image/*,video/*" style="display: none;">
+  
+  <script src="./auth.js"></script>
+  <script src="./filemanager.js"></script>
+  <script src="./schedule.js"></script>
   <script src="./script.js"></script>
+  <script>
+    // Check authentication
+    const currentUser = checkAuth();
+    if (currentUser) {
+      console.log('Logged in as:', currentUser.name, '-', currentUser.role);
+      
+      // Hide teacher dashboard for students
+      if (currentUser.role === 'student') {
+        const teacherLink = document.getElementById('teacher-dashboard-link');
+        if (teacherLink) teacherLink.style.display = 'none';
+      }
+    }
+    
+    // Load media files
+    function loadMedia() {
+      const images = getImages();
+      const grid = document.getElementById('media-grid');
+      grid.innerHTML = '';
+      
+      if (images.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8; font-size: 12px;">No media yet</p>';
+        return;
+      }
+      
+      images.slice(0, 6).forEach(img => {
+        const div = document.createElement('div');
+        div.style = 'background:#1f2933;border-radius:8px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden';
+        if (img.preview) {
+          div.innerHTML = `<img src="${img.preview}" style="width:100%;height:100%;object-fit:cover">`;
+        } else {
+          div.textContent = '🖼️';
+        }
+        grid.appendChild(div);
+      });
+    }
+    
+    // Load files
+    function loadFilesList() {
+      const files = getFiles({ category: 'document' });
+      const list = document.getElementById('files-list');
+      list.innerHTML = '';
+      
+      if (files.length === 0) {
+        list.innerHTML = '<p style="text-align: center; color: #94a3b8; font-size: 12px;">No files yet</p>';
+        return;
+      }
+      
+      files.forEach(file => {
+        const div = document.createElement('div');
+        div.style = 'display:flex;gap:8px;align-items:center;color:#94a3b8;cursor:pointer;padding:8px;border-radius:6px;transition:background 0.2s';
+        div.innerHTML = `
+          <span>${getFileIcon(file.type)}</span>
+          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${file.name}</span>
+        `;
+        div.onmouseover = () => div.style.background = 'rgba(59, 130, 246, 0.1)';
+        div.onmouseout = () => div.style.background = 'transparent';
+        list.appendChild(div);
+      });
+    }
+    
+    function getFileIcon(type) {
+      if (type.includes('pdf')) return '📄';
+      if (type.includes('word')) return '📝';
+      if (type.includes('image')) return '🖼️';
+      return '📁';
+    }
+    
+    // Load weekly schedule
+    function loadWeekSchedule() {
+      const weekNum = getCurrentWeekNumber();
+      const schedule = getSchedule('general', weekNum);
+      const container = document.getElementById('week-schedule');
+      
+      if (!schedule) {
+        container.innerHTML = '<p style="font-size: 12px;">No schedule uploaded for this week.</p>';
+        return;
+      }
+      
+      container.innerHTML = `
+        <div style="color: #60a5fa; font-size: 12px; margin-bottom: 8px;">Week ${weekNum}</div>
+        <div style="color: #94a3b8;">Schedule uploaded by ${schedule.uploadedBy}</div>
+      `;
+    }
+    
+    // File upload handlers
+    document.getElementById('upload-file-btn').addEventListener('click', () => {
+      if (!hasPermission('upload')) {
+        alert('Only teachers can upload files');
+        return;
+      }
+      document.getElementById('hidden-file-input').click();
+    });
+    
+    document.getElementById('upload-media-btn').addEventListener('click', () => {
+      if (!hasPermission('upload')) {
+        alert('Only teachers can upload media');
+        return;
+      }
+      document.getElementById('hidden-media-input').click();
+    });
+    
+    document.getElementById('hidden-file-input').addEventListener('change', function(e) {
+      Array.from(e.target.files).forEach(file => {
+        uploadFile(file, { category: 'document' });
+      });
+      this.value = '';
+      loadFilesList();
+    });
+    
+    document.getElementById('hidden-media-input').addEventListener('change', function(e) {
+      Array.from(e.target.files).forEach(file => {
+        uploadFile(file, { category: 'image' });
+      });
+      this.value = '';
+      loadMedia();
+    });
+    
+    // Initial load
+    loadMedia();
+    loadFilesList();
+    loadWeekSchedule();
+    
+    // Hide Students tab for non-teachers
+    const currentUser = getCurrentUser();
+    if (currentUser && currentUser.role !== 'teacher') {
+      const studentsLink = document.getElementById('students-link');
+      if (studentsLink) {
+        studentsLink.style.display = 'none';
+      }
+    }
+  </script>
 </body>
 </html>

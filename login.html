@@ -9,62 +9,164 @@
       height: 100%;
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f5f7fa;
+      background: linear-gradient(135deg, #0b1220 0%, #1a1f35 100%);
       display: flex;
       justify-content: center;
       align-items: center;
     }
     .login-container {
-      background: white;
+      background: rgba(31, 41, 51, 0.95);
+      border: 1px solid rgba(59, 130, 246, 0.3);
       padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      width: 300px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      width: 400px;
       text-align: center;
     }
+    .sage-icon {
+      font-size: 64px;
+      margin-bottom: 10px;
+    }
     h2 {
-      margin-bottom: 20px;
-      color: #4a90e2;
+      margin-bottom: 10px;
+      color: #fff;
+      font-size: 28px;
+    }
+    p {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 30px;
     }
     input[type="text"], input[type="password"] {
       width: 100%;
-      padding: 12px 10px;
+      padding: 12px 16px;
       margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 10px;
       box-sizing: border-box;
-      font-size: 16px;
+      font-size: 15px;
+      color: #fff;
+      outline: none;
+      transition: all 0.3s;
+    }
+    input:focus {
+      border-color: rgba(59, 130, 246, 0.6);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
     button {
-      background-color: #4a90e2;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
       color: white;
-      padding: 12px 20px;
+      padding: 14px 20px;
       border: none;
-      border-radius: 6px;
+      border-radius: 10px;
       cursor: pointer;
       font-size: 16px;
+      font-weight: 600;
       width: 100%;
-      margin-top: 15px;
+      margin-top: 10px;
+      transition: all 0.3s;
     }
     button:hover {
-      background-color: #357abd;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+    }
+    .error-message {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 10px;
+      padding: 12px;
+      color: #ef4444;
+      font-size: 14px;
+      display: none;
+      margin-bottom: 15px;
+    }
+    .error-message.show {
+      display: block;
+    }
+    .demo-accounts {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    .demo-accounts h3 {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .demo-account {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: #94a3b8;
+      text-align: left;
+    }
+    .demo-account strong {
+      color: #60a5fa;
+    }
+    code {
+      background: rgba(59, 130, 246, 0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #60a5fa;
     }
   </style>
 </head>
 <body>
   <div class="login-container">
-    <h2>Teacher Bot Login</h2>
+    <div class="sage-icon">🧙‍♂️</div>
+    <h2>Class AI Assistant</h2>
+    <p>Login to continue</p>
+    
+    <div class="error-message" id="error-message"></div>
+    
     <form id="login-form">
       <input type="text" id="username" placeholder="Username" required />
       <input type="password" id="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
+    
+    <div class="demo-accounts">
+      <h3>Demo Accounts</h3>
+      <div class="demo-account">
+        <strong>👨‍🏫 Teacher:</strong> <code>teacher1</code> / <code>teacher123</code>
+      </div>
+      <div class="demo-account">
+        <strong>👨‍🎓 Student:</strong> <code>student1</code> / <code>student123</code>
+      </div>
+    </div>
   </div>
+  
+  <script src="./teacher-bot-assistant/auth.js"></script>
   <script>
+    // Check if already logged in
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      window.location.href = 'teacher-bot-assistant/index.html';
+    }
+    
     document.getElementById('login-form').addEventListener('submit', function(e) {
       e.preventDefault();
-      // For demo, just redirect to main page
-      window.location.href = 'index.html';
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('error-message');
+      
+      const user = login(username, password);
+      
+      if (user) {
+        window.location.href = 'teacher-bot-assistant/index.html';
+      } else {
+        errorMessage.textContent = '❌ Invalid username or password. Please try again.';
+        errorMessage.classList.add('show');
+        
+        setTimeout(() => {
+          errorMessage.classList.remove('show');
+        }, 3000);
+      }
     });
   </script>
 </body>

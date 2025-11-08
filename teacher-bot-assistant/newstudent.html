@@ -3,82 +3,303 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Add New Student</title>
+    <title>Add New Student - Teacher Bot Assistant</title>
+    <link rel="stylesheet" href="./styles.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            max-width: 600px;
+        .student-form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
         }
-        h1 {
-            color: #333;
+        .student-form-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
         }
-        form {
-            display: flex;
-            flex-direction: column;
+        .form-title {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
         }
-        label {
-            margin-top: 10px;
-            font-weight: bold;
+        .form-subtitle {
+            color: var(--muted);
+            text-align: center;
+            margin-bottom: 30px;
         }
-        input, select, textarea {
-            padding: 8px;
-            margin-top: 5px;
-            font-size: 1rem;
+        .form-group {
+            margin-bottom: 20px;
         }
-        button {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 1rem;
-            background-color: #007bff;
+        .form-group label {
+            display: block;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
             border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
         }
-        button:hover {
-            background-color: #0056b3;
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
         }
         .success-message {
-            color: green;
-            margin-top: 15px;
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #4ade80;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .students-list {
+            margin-top: 40px;
+        }
+        .students-list h3 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .student-card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        .student-card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateX(5px);
+        }
+        .student-card h4 {
+            color: #3b82f6;
+            margin: 0 0 10px 0;
+        }
+        .student-info {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
-    <h1>Add New Student</h1>
-    <form id="new-student-form">
-        <label for="student-name">Student Name:</label>
-        <input type="text" id="student-name" name="studentName" required />
+<body>
+    <div class="app-container">
+        <!-- Left Sidebar: Chats List -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo">CH</div>
+                <h2 style="margin:0;font-size:18px;color:#fff">Chat</h2>
+            </div>
+            <div class="search">
+                <span>🔍</span>
+                <span>Search</span>
+            </div>
+            <div class="chats">
+                <div class="chat-item" data-page="index.html">
+                    <div class="avatar">🧙</div>
+                    <div class="meta">
+                        <div class="name">Sage - AI Assistant</div>
+                        <div class="last">Let me help you with that...</div>
+                    </div>
+                </div>
+                <div class="chat-item" data-page="teacher-dashboard.html" id="teacher-dashboard-link">
+                    <div class="avatar">👨‍🏫</div>
+                    <div class="meta">
+                        <div class="name">Teacher Dashboard</div>
+                        <div class="last">Manage courses & files</div>
+                    </div>
+                </div>
+                <div class="chat-item" data-page="topics.html">
+                    <div class="avatar">📚</div>
+                    <div class="meta">
+                        <div class="name">Teacher Tools</div>
+                        <div class="last">Browse topics and resources</div>
+                    </div>
+                </div>
+                <div class="chat-item" data-page="newpost.html">
+                    <div class="avatar">📝</div>
+                    <div class="meta">
+                        <div class="name">New Post</div>
+                        <div class="last">Create a new post...</div>
+                    </div>
+                </div>
+                <div class="chat-item" data-page="classrooms.html">
+                    <div class="avatar">🏫</div>
+                    <div class="meta">
+                        <div class="name">Class Chat Rooms</div>
+                        <div class="last">Join your class</div>
+                    </div>
+                </div>
+                <div class="chat-item active" data-page="newstudent.html">
+                    <div class="avatar">🎓</div>
+                    <div class="meta">
+                        <div class="name">Students</div>
+                        <div class="last">Add new student</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
-        <label for="learning-style">Preferred Learning Style:</label>
-        <select id="learning-style" name="learningStyle" required>
-            <option value="">Select learning style</option>
-            <option value="visual">Visual</option>
-            <option value="auditory">Auditory</option>
-            <option value="kinesthetic">Kinesthetic</option>
-        </select>
+        <!-- Center: Student Form -->
+        <div class="chat-area">
+            <div class="topbar">
+                <div class="title">
+                    <h2>Student Management</h2>
+                    <p>Add and manage student profiles</p>
+                </div>
+                <button onclick="logout()" style="background:rgba(255,0,0,0.1);border:none;padding:10px 20px;border-radius:8px;color:#ff4444;cursor:pointer;font-weight:600">Logout</button>
+            </div>
 
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age" min="3" max="120" required />
+            <div class="messages-wrap" style="padding: 20px;">
+                <div class="student-form-container">
+                    <div class="student-form-card">
+                        <h1 class="form-title">➕ Add New Student</h1>
+                        <p class="form-subtitle">Create a new student profile for personalized learning</p>
+                        
+                        <form id="new-student-form">
+                            <div class="form-group">
+                                <label for="student-name">Student Name *</label>
+                                <input type="text" id="student-name" name="studentName" placeholder="Enter student's full name" required />
+                            </div>
 
-        <label for="class">Class/Grade:</label>
-        <input type="text" id="class" name="class" required />
+                            <div class="form-group">
+                                <label for="learning-style">Preferred Learning Style *</label>
+                                <select id="learning-style" name="learningStyle" required>
+                                    <option value="">Select learning style</option>
+                                    <option value="visual">📊 Visual - Learn through images and diagrams</option>
+                                    <option value="auditory">🎧 Auditory - Learn through listening and discussions</option>
+                                    <option value="kinesthetic">🤸 Kinesthetic - Learn through hands-on activities</option>
+                                </select>
+                            </div>
 
-        <label for="favorite-subject">Favorite Subject:</label>
-        <input type="text" id="favorite-subject" name="favoriteSubject" />
+                            <div class="form-group">
+                                <label for="age">Age *</label>
+                                <input type="number" id="age" name="age" min="3" max="120" placeholder="Student's age" required />
+                            </div>
 
-        <label for="notes">Additional Notes:</label>
-        <textarea id="notes" name="notes" rows="4"></textarea>
+                            <div class="form-group">
+                                <label for="class">Class/Grade *</label>
+                                <input type="text" id="class" name="class" placeholder="e.g., Grade 5, Year 10" required />
+                            </div>
 
-        <button type="submit">Add Student</button>
-    </form>
-    <div class="success-message" id="success-message" style="display:none;">
-        Student added successfully!
+                            <div class="form-group">
+                                <label for="favorite-subject">Favorite Subject</label>
+                                <input type="text" id="favorite-subject" name="favoriteSubject" placeholder="e.g., Math, Science, History" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="notes">Additional Notes</label>
+                                <textarea id="notes" name="notes" rows="4" placeholder="Any special needs, interests, or important information..."></textarea>
+                            </div>
+
+                            <button type="submit" class="submit-btn">✅ Add Student</button>
+                        </form>
+                        
+                        <div class="success-message" id="success-message">
+                            ✅ Student added successfully!
+                        </div>
+                    </div>
+
+                    <!-- Students List -->
+                    <div class="students-list" id="students-list">
+                        <h3>📋 Registered Students</h3>
+                        <div id="students-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Details Panel -->
+        <aside class="details">
+            <h3>QUICK ACTIONS</h3>
+            
+            <div class="card">
+                <h4 style="margin:0 0 8px 0;font-size:14px">Student Stats</h4>
+                <div style="font-size:13px;color:var(--muted)">
+                    Total Students: <span id="total-students" style="color:#3b82f6;font-weight:bold">0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 style="margin:0 0 8px 0;font-size:14px">Learning Styles</h4>
+                <div style="font-size:12px;color:var(--muted);line-height:1.8">
+                    📊 Visual: <span id="visual-count">0</span><br>
+                    🎧 Auditory: <span id="auditory-count">0</span><br>
+                    🤸 Kinesthetic: <span id="kinesthetic-count">0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 style="margin:0 0 8px 0;font-size:14px">Tips</h4>
+                <div style="font-size:12px;color:var(--muted);line-height:1.6">
+                    💡 Use Sage AI to create personalized lesson plans for each student based on their learning style!
+                </div>
+            </div>
+        </aside>
     </div>
 
+    <script src="auth.js"></script>
     <script>
+        // Check authentication
+        checkAuth();
+
         const form = document.getElementById('new-student-form');
         const successMessage = document.getElementById('success-message');
+
+        // Load existing students on page load
+        loadStudents();
 
         form.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -95,19 +316,84 @@
                 return;
             }
 
-            // Save new student data to localStorage (or send to backend if applicable)
+            // Save new student data to localStorage
             let students = JSON.parse(localStorage.getItem('students')) || {};
             students[studentName] = {
+                name: studentName.charAt(0).toUpperCase() + studentName.slice(1),
                 learningStyle: learningStyle,
                 age: age,
                 class: studentClass,
                 favoriteSubject: favoriteSubject,
-                notes: notes
+                notes: notes,
+                addedAt: new Date().toISOString()
             };
             localStorage.setItem('students', JSON.stringify(students));
 
+            // Show success message
             successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+
+            // Reset form
             form.reset();
+
+            // Reload students list
+            loadStudents();
+        });
+
+        function loadStudents() {
+            const students = JSON.parse(localStorage.getItem('students')) || {};
+            const container = document.getElementById('students-container');
+            const studentKeys = Object.keys(students);
+
+            // Update stats
+            document.getElementById('total-students').textContent = studentKeys.length;
+
+            let visualCount = 0, auditoryCount = 0, kinestheticCount = 0;
+
+            if (studentKeys.length === 0) {
+                container.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">No students registered yet</div>';
+            } else {
+                container.innerHTML = '';
+                studentKeys.forEach(key => {
+                    const student = students[key];
+                    
+                    // Count learning styles
+                    if (student.learningStyle === 'visual') visualCount++;
+                    else if (student.learningStyle === 'auditory') auditoryCount++;
+                    else if (student.learningStyle === 'kinesthetic') kinestheticCount++;
+
+                    const card = document.createElement('div');
+                    card.className = 'student-card';
+                    card.innerHTML = `
+                        <h4>🎓 ${student.name || key}</h4>
+                        <div class="student-info">
+                            <strong>Age:</strong> ${student.age} | 
+                            <strong>Class:</strong> ${student.class}<br>
+                            <strong>Learning Style:</strong> ${student.learningStyle.charAt(0).toUpperCase() + student.learningStyle.slice(1)}<br>
+                            ${student.favoriteSubject ? `<strong>Favorite Subject:</strong> ${student.favoriteSubject}<br>` : ''}
+                            ${student.notes ? `<strong>Notes:</strong> ${student.notes}` : ''}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            // Update learning style counts
+            document.getElementById('visual-count').textContent = visualCount;
+            document.getElementById('auditory-count').textContent = auditoryCount;
+            document.getElementById('kinesthetic-count').textContent = kinestheticCount;
+        }
+
+        // Sidebar navigation
+        document.querySelectorAll('.chat-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const page = this.getAttribute('data-page');
+                if (page) {
+                    window.location.href = page;
+                }
+            });
         });
     </script>
 </body>

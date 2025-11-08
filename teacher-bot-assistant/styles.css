@@ -255,43 +255,55 @@ html,body{
   0% {
     transform: translate(-50%, -50%) rotate(0deg) scale(0);
     opacity: 0;
+    filter: hue-rotate(0deg) brightness(1);
   }
   30% {
     opacity: 1;
+    filter: hue-rotate(90deg) brightness(1.5);
   }
   100% {
     transform: translate(-50%, -50%) rotate(720deg) scale(1);
-    opacity: 0.8;
+    opacity: 0.9;
+    filter: hue-rotate(180deg) brightness(1.2);
   }
 }
 
 @keyframes portal-pulse {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.6),
-                0 0 40px rgba(139, 92, 246, 0.4),
-                inset 0 0 30px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.8),
+                0 0 60px rgba(139, 92, 246, 0.6),
+                0 0 90px rgba(59, 130, 246, 0.4),
+                inset 0 0 40px rgba(59, 130, 246, 0.4);
   }
   50% {
-    box-shadow: 0 0 40px rgba(139, 92, 246, 0.9),
-                0 0 80px rgba(139, 92, 246, 0.6),
-                inset 0 0 50px rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 50px rgba(139, 92, 246, 1),
+                0 0 100px rgba(139, 92, 246, 0.8),
+                0 0 150px rgba(59, 130, 246, 0.6),
+                inset 0 0 60px rgba(59, 130, 246, 0.6);
   }
 }
 
 @keyframes sage-emerge {
   0% {
-    transform: translate(-50%, -50%) scale(0) rotateY(0deg);
+    transform: translate(-50%, -50%) scale(0) rotateY(0deg) translateZ(-100px);
     opacity: 0;
-    filter: blur(10px);
+    filter: blur(15px) brightness(2);
   }
-  50% {
-    transform: translate(-50%, -50%) scale(1.3) rotateY(180deg);
-    filter: blur(2px);
+  40% {
+    transform: translate(-50%, -50%) scale(0.5) rotateY(180deg) translateZ(-50px);
+    filter: blur(8px) brightness(1.8);
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.4) rotateY(270deg) translateZ(0);
+    filter: blur(2px) brightness(1.3);
+  }
+  85% {
+    transform: translate(-50%, -50%) scale(0.9) rotateY(340deg);
   }
   100% {
-    transform: translate(-50%, -50%) scale(1) rotateY(360deg);
+    transform: translate(-50%, -50%) scale(1) rotateY(360deg) translateZ(0);
     opacity: 1;
-    filter: blur(0);
+    filter: blur(0) brightness(1);
   }
 }
 
@@ -330,11 +342,99 @@ html,body{
   }
   30% {
     opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2) rotate(90deg);
   }
   100% {
-    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(1.5) rotate(180deg);
+    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(1.5) rotate(360deg);
     opacity: 0;
   }
+}
+
+@keyframes lightning-bolt {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scaleY(0);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scaleY(1);
+  }
+  20% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  40%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes particle-spiral {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(150px) rotate(0deg) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(720deg) translateX(0px) rotate(-720deg) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes rune-orbit {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(100px) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(100px) rotate(-360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes flash-burst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2);
+  }
+}
+
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2px, 2px); }
+  20% { transform: translate(2px, -2px); }
+  30% { transform: translate(-2px, -2px); }
+  40% { transform: translate(2px, 2px); }
+  50% { transform: translate(-2px, 2px); }
+  60% { transform: translate(2px, -2px); }
+  70% { transform: translate(-2px, -2px); }
+  80% { transform: translate(2px, 2px); }
+  90% { transform: translate(-1px, -1px); }
 }
 
 /* Portal Container */
@@ -356,13 +456,16 @@ html,body{
   width: 200px;
   height: 200px;
   background: radial-gradient(circle, 
-    rgba(139, 92, 246, 0.4) 0%,
-    rgba(59, 130, 246, 0.3) 30%,
-    rgba(16, 185, 129, 0.2) 60%,
+    rgba(139, 92, 246, 0.6) 0%,
+    rgba(59, 130, 246, 0.5) 25%,
+    rgba(16, 185, 129, 0.4) 50%,
+    rgba(236, 72, 153, 0.3) 75%,
     transparent 100%);
-  border: 4px solid rgba(139, 92, 246, 0.7);
+  border: 5px solid rgba(139, 92, 246, 0.9);
   border-radius: 50%;
-  animation: portal-spin 2s ease-out, portal-pulse 2s ease-out infinite;
+  animation: portal-spin 2s ease-out, portal-pulse 0.6s ease-in-out infinite;
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.8),
+              inset 0 0 40px rgba(59, 130, 246, 0.6);
 }
 
 .portal::before {
@@ -422,6 +525,66 @@ html,body{
   animation: star-twinkle 2.2s ease-out forwards;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.9),
                0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+.lightning {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 40px;
+  animation: lightning-bolt 0.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.9));
+}
+
+.ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  border: 3px solid rgba(139, 92, 246, 0.6);
+  border-radius: 50%;
+  animation: ripple-expand 1.5s ease-out;
+}
+
+.energy-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(45deg, #a78bfa, #60a5fa);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
+  animation: particle-spiral 2s ease-in forwards;
+}
+
+.magic-rune {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 28px;
+  animation: rune-orbit 3s linear;
+  text-shadow: 0 0 15px rgba(139, 92, 246, 0.9);
+}
+
+.flash-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, 
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(139, 92, 246, 0.4) 50%,
+    transparent 100%);
+  border-radius: 50%;
+  animation: flash-burst 0.6s ease-out 1.2s;
+  pointer-events: none;
+}
+
+.portal-container.shake {
+  animation: screen-shake 0.5s ease-in-out 1.5s;
 }
 
 /* Legacy class compatibility for existing JS */

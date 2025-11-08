@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Dashboard - Class AI Assistant</title>
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .dashboard-container {
+      display: flex;
+      height: 100vh;
+      background: var(--bg);
+    }
+    
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      background: rgba(31, 41, 51, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 10px;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .tab.active {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      color: white;
+      border-color: transparent;
+    }
+    
+    .tab:hover:not(.active) {
+      border-color: rgba(59, 130, 246, 0.6);
+      color: #fff;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .upload-section {
+      background: rgba(31, 41, 51, 0.6);
+      border: 2px dashed rgba(59, 130, 246, 0.4);
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 30px;
+      transition: all 0.3s;
+    }
+    
+    .upload-section:hover {
+      border-color: rgba(59, 130, 246, 0.7);
+      background: rgba(31, 41, 51, 0.8);
+    }
+    
+    .upload-icon {
+      font-size: 64px;
+      margin-bottom: 15px;
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .file-input {
+      display: none;
+    }
+    
+    .file-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+    
+    .file-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+    }
+    
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .course-card {
+      background: rgba(31, 41, 51, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      transition: all 0.3s;
+    }
+    
+    .course-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(59, 130, 246, 0.6);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .course-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    
+    .course-icon {
+      font-size: 32px;
+    }
+    
+    .course-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+    }
+    
+    .course-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 10px;
+    }
+    
+    .course-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 13px;
+      border-radius: 8px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      background: transparent;
+      color: #60a5fa;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-small:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.6);
+    }
+    
+    .btn-delete {
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    
+    .btn-delete:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.6);
+    }
+    
+    .files-list {
+      margin-top: 20px;
+    }
+    
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      background: rgba(31, 41, 51, 0.4);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .file-icon-type {
+      font-size: 28px;
+    }
+    
+    .schedule-editor {
+      background: rgba(31, 41, 51, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+    }
+    
+    .schedule-day {
+      margin-bottom: 20px;
+    }
+    
+    .day-header {
+      font-size: 16px;
+      font-weight: 600;
+      color: #60a5fa;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .time-slot {
+      display: grid;
+      grid-template-columns: 100px 1fr 150px 100px;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    
+    .time-slot input, .time-slot select {
+      padding: 8px 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar (reuse from index.html) -->
+    <div class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">🧙‍♂️</div>
+        <h2>Sage AI</h2>
+      </div>
+      <div class="menu">
+        <div class="chat-item" onclick="window.location.href='index.html'">
+          <span class="avatar">💬</span>
+          <div class="chat-item-info">
+            <div class="chat-name">Chat with Sage</div>
+          </div>
+        </div>
+        <div class="chat-item active">
+          <span class="avatar">👨‍🏫</span>
+          <div class="chat-item-info">
+            <div class="chat-name">Teacher Dashboard</div>
+          </div>
+        </div>
+        <div class="chat-item" onclick="window.location.href='classrooms.html'">
+          <span class="avatar">🏫</span>
+          <div class="chat-item-info">
+            <div class="chat-name">Class Rooms</div>
+          </div>
+        </div>
+        <div class="chat-item" onclick="logout()">
+          <span class="avatar">🚪</span>
+          <div class="chat-item-info">
+            <div class="chat-name">Logout</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <div class="dashboard-header">
+        <div>
+          <h1 style="color: #fff; margin-bottom: 5px;">Teacher Dashboard</h1>
+          <p style="color: #94a3b8; margin: 0;">Manage courses, files, and schedules</p>
+        </div>
+        <div class="user-info">
+          <div>
+            <div style="color: #fff; font-weight: 600;" id="user-name">Mr. Johnson</div>
+            <div style="color: #94a3b8; font-size: 13px;" id="user-role">Teacher</div>
+          </div>
+          <div class="user-avatar">👨‍🏫</div>
+        </div>
+      </div>
+      
+      <div class="tabs">
+        <div class="tab active" data-tab="courses">📚 Courses</div>
+        <div class="tab" data-tab="files">📁 Files</div>
+        <div class="tab" data-tab="schedule">📅 Schedule</div>
+        <div class="tab" data-tab="requests">📬 Requests</div>
+      </div>
+      
+      <!-- Courses Tab -->
+      <div class="tab-content active" id="courses-tab">
+        <div class="upload-section">
+          <div class="upload-icon">📚</div>
+          <h3 style="color: #fff; margin-bottom: 10px;">Upload New Course</h3>
+          <p style="color: #94a3b8; margin-bottom: 20px;">Add course materials, PDFs, or documents</p>
+          
+          <div style="max-width: 500px; margin: 0 auto; text-align: left;">
+            <input type="text" id="course-title" placeholder="Course Title" style="width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #fff;">
+            <textarea id="course-description" placeholder="Course Description" style="width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #fff; resize: vertical;" rows="3"></textarea>
+            <select id="course-class" style="width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #fff;">
+              <option value="">Select Class</option>
+              <option value="math-101">Math 101</option>
+              <option value="science-201">Science 201</option>
+              <option value="history-101">History 101</option>
+              <option value="english-101">English 101</option>
+            </select>
+          </div>
+          
+          <div class="file-input-wrapper">
+            <label class="file-btn" for="course-file">
+              📎 Choose Files
+            </label>
+            <input type="file" id="course-file" class="file-input" multiple>
+          </div>
+          <button onclick="uploadCourse()" style="margin-left: 10px;" class="file-btn">✅ Upload Course</button>
+        </div>
+        
+        <h3 style="color: #fff; margin-bottom: 15px;">All Courses</h3>
+        <div class="courses-grid" id="courses-grid">
+          <!-- Courses will be loaded here -->
+        </div>
+      </div>
+      
+      <!-- Files Tab -->
+      <div class="tab-content" id="files-tab">
+        <div class="upload-section">
+          <div class="upload-icon">📁</div>
+          <h3 style="color: #fff; margin-bottom: 10px;">Upload Files</h3>
+          <p style="color: #94a3b8; margin-bottom: 20px;">Images, documents, or other materials</p>
+          <div class="file-input-wrapper">
+            <label class="file-btn" for="general-file">
+              📎 Choose Files
+            </label>
+            <input type="file" id="general-file" class="file-input" multiple>
+          </div>
+        </div>
+        
+        <div class="files-list" id="files-list">
+          <!-- Files will be loaded here -->
+        </div>
+      </div>
+      
+      <!-- Schedule Tab -->
+      <div class="tab-content" id="schedule-tab">
+        <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+          <h3 style="color: #fff; margin: 0;">Weekly Schedule</h3>
+          <select id="class-selector" style="padding: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #fff;">
+            <option value="general">General Schedule</option>
+            <option value="math-101">Math 101</option>
+            <option value="science-201">Science 201</option>
+            <option value="english-101">English 101</option>
+            <option value="history-101">History 101</option>
+          </select>
+          <select id="week-selector" style="padding: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #fff;">
+            <option value="">Current Week</option>
+          </select>
+          <button onclick="saveScheduleFromEditor()" class="file-btn">💾 Save Schedule</button>
+        </div>
+        
+        <div class="schedule-editor" id="schedule-editor">
+          <!-- Schedule will be loaded here -->
+        </div>
+      </div>
+      
+      <!-- Requests Tab -->
+      <div class="tab-content" id="requests-tab">
+        <h3 style="color: #fff; margin-bottom: 15px;">Student Join Requests</h3>
+        <div id="requests-list">
+          <!-- Requests will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="./auth.js"></script>
+  <script src="./filemanager.js"></script>
+  <script src="./schedule.js"></script>
+  <script>
+    // Check authentication
+    const currentUser = checkAuth();
+    if (currentUser && currentUser.role !== 'teacher') {
+      alert('Access denied. Teachers only.');
+      window.location.href = 'index.html';
+    }
+    
+    // Update user info
+    if (currentUser) {
+      document.getElementById('user-name').textContent = currentUser.name;
+      document.getElementById('user-role').textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+    }
+    
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        this.classList.add('active');
+        document.getElementById(this.dataset.tab + '-tab').classList.add('active');
+      });
+    });
+    
+    // Load courses
+    function loadCourses() {
+      const courses = getAllCourses();
+      const grid = document.getElementById('courses-grid');
+      grid.innerHTML = '';
+      
+      if (courses.length === 0) {
+        grid.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">No courses uploaded yet.</p>';
+        return;
+      }
+      
+      courses.forEach(course => {
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.innerHTML = `
+          <div class="course-header">
+            <div class="course-icon">📚</div>
+            <div class="course-title">${course.title}</div>
+          </div>
+          <p style="color: #94a3b8; font-size: 14px; margin: 10px 0;">${course.description}</p>
+          <div class="course-meta">
+            <span>📁 ${course.files?.length || 0} files</span>
+            <span>👁️ ${course.views || 0} views</span>
+          </div>
+          <div class="course-actions">
+            <button class="btn-small" onclick="viewCourse('${course.id}')">👁️ View</button>
+            <button class="btn-small btn-delete" onclick="deleteCourse('${course.id}')">🗑️ Delete</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+    
+    // Upload course
+    function uploadCourse() {
+      const title = document.getElementById('course-title').value;
+      const description = document.getElementById('course-description').value;
+      const classId = document.getElementById('course-class').value;
+      const fileInput = document.getElementById('course-file');
+      
+      if (!title || !classId) {
+        alert('Please fill in title and select a class');
+        return;
+      }
+      
+      const course = createCourse(title, description, classId);
+      
+      if (fileInput.files.length > 0) {
+        Array.from(fileInput.files).forEach(file => {
+          uploadFile(file, { classId, category: 'course', courseId: course.id });
+        });
+      }
+      
+      alert('✅ Course uploaded successfully!');
+      document.getElementById('course-title').value = '';
+      document.getElementById('course-description').value = '';
+      fileInput.value = '';
+      loadCourses();
+    }
+    
+    function deleteCourse(id) {
+      if (confirm('Delete this course?')) {
+        const courses = JSON.parse(localStorage.getItem('courses')) || [];
+        const updated = courses.filter(c => c.id !== id);
+        localStorage.setItem('courses', JSON.stringify(updated));
+        loadCourses();
+      }
+    }
+    
+    // Load files
+    function loadFiles() {
+      const files = getFiles();
+      const list = document.getElementById('files-list');
+      list.innerHTML = '';
+      
+      files.forEach(file => {
+        const item = document.createElement('div');
+        item.className = 'file-item';
+        item.innerHTML = `
+          <div class="file-info">
+            <div class="file-icon-type">${getFileIcon(file.type)}</div>
+            <div>
+              <div style="color: #fff; font-weight: 600;">${file.name}</div>
+              <div style="color: #94a3b8; font-size: 13px;">${formatBytes(file.size)} • ${new Date(file.uploadedAt).toLocaleDateString()}</div>
+            </div>
+          </div>
+          <button class="btn-small btn-delete" onclick="deleteFile('${file.id}')">🗑️</button>
+        `;
+        list.appendChild(item);
+      });
+    }
+    
+    function getFileIcon(type) {
+      if (type.includes('image')) return '🖼️';
+      if (type.includes('pdf')) return '📄';
+      if (type.includes('word')) return '📝';
+      if (type.includes('video')) return '🎥';
+      return '📁';
+    }
+    
+    function formatBytes(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+    
+    // File upload handlers
+    document.getElementById('general-file').addEventListener('change', function(e) {
+      Array.from(e.target.files).forEach(file => {
+        uploadFile(file, { category: 'document' });
+      });
+      alert('✅ Files uploaded successfully!');
+      this.value = '';
+      loadFiles();
+    });
+    
+    // Load requests
+    function loadRequests() {
+      const requests = JSON.parse(localStorage.getItem('pendingRequests')) || [];
+      const list = document.getElementById('requests-list');
+      
+      if (requests.length === 0) {
+        list.innerHTML = '<p style="color: #94a3b8;">No pending requests.</p>';
+        return;
+      }
+      
+      list.innerHTML = requests.map(req => `
+        <div class="file-item">
+          <div class="file-info">
+            <div class="file-icon-type">👨‍🎓</div>
+            <div>
+              <div style="color: #fff; font-weight: 600;">${req.studentName}</div>
+              <div style="color: #94a3b8; font-size: 13px;">wants to join ${req.className}</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-small" onclick="approveRequest('${req.id}')">✅ Approve</button>
+            <button class="btn-small btn-delete" onclick="rejectRequest('${req.id}')">❌ Reject</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function approveRequest(id) {
+      const requests = JSON.parse(localStorage.getItem('pendingRequests')) || [];
+      const request = requests.find(r => r.id === id);
+      
+      if (request) {
+        // Add to joined classes
+        const joined = JSON.parse(localStorage.getItem('joinedClasses')) || [];
+        joined.push(request);
+        localStorage.setItem('joinedClasses', JSON.stringify(joined));
+        
+        // Remove from pending
+        const updated = requests.filter(r => r.id !== id);
+        localStorage.setItem('pendingRequests', JSON.stringify(updated));
+        
+        alert('✅ Request approved!');
+        loadRequests();
+      }
+    }
+    
+    function rejectRequest(id) {
+      const requests = JSON.parse(localStorage.getItem('pendingRequests')) || [];
+      const updated = requests.filter(r => r.id !== id);
+      localStorage.setItem('pendingRequests', JSON.stringify(updated));
+      alert('Request rejected.');
+      loadRequests();
+    }
+    
+    // Initial load
+    loadCourses();
+    loadFiles();
+    loadRequests();
+    loadScheduleEditor();
+    
+    // Add event listeners for selectors
+    document.getElementById('class-selector').addEventListener('change', function() {
+      const weekNum = document.getElementById('week-selector').value || getCurrentWeekNumber();
+      loadExistingSchedule(weekNum);
+    });
+    
+    document.getElementById('week-selector').addEventListener('change', function() {
+      loadExistingSchedule(this.value || getCurrentWeekNumber());
+    });
+    
+    // Load schedule editor
+    function loadScheduleEditor() {
+      const weekNum = getCurrentWeekNumber();
+      const editor = document.getElementById('schedule-editor');
+      const weekSelector = document.getElementById('week-selector');
+      
+      // Populate week selector
+      for (let i = 0; i < 4; i++) {
+        const option = document.createElement('option');
+        option.value = weekNum + i;
+        option.textContent = `Week ${weekNum + i}`;
+        if (i === 0) option.selected = true;
+        weekSelector.appendChild(option);
+      }
+      
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      const timeSlots = [
+        '08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00',
+        '13:00-14:00', '14:00-15:00', '15:00-16:00'
+      ];
+      
+      days.forEach(day => {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'schedule-day';
+        dayDiv.innerHTML = `<div class="day-header">${day}</div>`;
+        
+        timeSlots.forEach((time, index) => {
+          const slotDiv = document.createElement('div');
+          slotDiv.className = 'time-slot';
+          slotDiv.innerHTML = `
+            <input type="text" value="${time}" disabled>
+            <input type="text" placeholder="Subject" data-day="${day}" data-slot="${index}" data-field="subject">
+            <input type="text" placeholder="Teacher" data-day="${day}" data-slot="${index}" data-field="teacher">
+            <input type="text" placeholder="Room" data-day="${day}" data-slot="${index}" data-field="room">
+          `;
+          dayDiv.appendChild(slotDiv);
+        });
+        
+        editor.appendChild(dayDiv);
+      });
+      
+      // Load existing schedule if available
+      const currentWeek = weekSelector.value || weekNum;
+      loadExistingSchedule(currentWeek);
+    }
+    
+    function loadExistingSchedule(weekNum) {
+      const classId = document.getElementById('class-selector').value || 'general';
+      const schedule = getSchedule(classId, weekNum);
+      if (!schedule) return;
+      
+      Object.keys(schedule).forEach(day => {
+        if (Array.isArray(schedule[day])) {
+          schedule[day].forEach((slot, index) => {
+            const subjectInput = document.querySelector(`input[data-day="${day.charAt(0).toUpperCase() + day.slice(1)}"][data-slot="${index}"][data-field="subject"]`);
+            const teacherInput = document.querySelector(`input[data-day="${day.charAt(0).toUpperCase() + day.slice(1)}"][data-slot="${index}"][data-field="teacher"]`);
+            const roomInput = document.querySelector(`input[data-day="${day.charAt(0).toUpperCase() + day.slice(1)}"][data-slot="${index}"][data-field="room"]`);
+            
+            if (subjectInput) subjectInput.value = slot.subject || '';
+            if (teacherInput) teacherInput.value = slot.teacher || '';
+            if (roomInput) roomInput.value = slot.room || '';
+          });
+        }
+      });
+    }
+    
+    function saveScheduleFromEditor() {
+      const classId = document.getElementById('class-selector').value || 'general';
+      const weekNum = document.getElementById('week-selector').value || getCurrentWeekNumber();
+      const scheduleData = {
+        monday: [], tuesday: [], wednesday: [], thursday: [], friday: []
+      };
+      
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      const timeSlots = [
+        '08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00',
+        '13:00-14:00', '14:00-15:00', '15:00-16:00'
+      ];
+      
+      days.forEach(day => {
+        const dayKey = day.toLowerCase();
+        timeSlots.forEach((time, index) => {
+          const subjectInput = document.querySelector(`input[data-day="${day}"][data-slot="${index}"][data-field="subject"]`);
+          const teacherInput = document.querySelector(`input[data-day="${day}"][data-slot="${index}"][data-field="teacher"]`);
+          const roomInput = document.querySelector(`input[data-day="${day}"][data-slot="${index}"][data-field="room"]`);
+          
+          scheduleData[dayKey].push({
+            time: time,
+            subject: subjectInput?.value || '',
+            teacher: teacherInput?.value || '',
+            room: roomInput?.value || ''
+          });
+        });
+      });
+      
+      // Call the saveSchedule function from schedule.js with the selected class
+      saveSchedule(classId, weekNum, scheduleData);
+      alert(`✅ Schedule saved successfully for ${classId} - Week ${weekNum}!`);
+    }
+  </script>
+</body>
+</html>
